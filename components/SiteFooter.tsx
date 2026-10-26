@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Phone } from "lucide-react";
+import { ArrowUpRight, Mail, Phone } from "lucide-react";
 import type { SiteSettings } from "@/lib/brand";
 
 export function SiteFooter({ settings, whatsappUrl }: { settings: SiteSettings; whatsappUrl: string }) {

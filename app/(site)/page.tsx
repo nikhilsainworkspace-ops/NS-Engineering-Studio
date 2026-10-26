@@ -16,6 +16,7 @@ import {
   Network,
   PanelsTopLeft,
   ShieldCheck,
+  Sparkles,
   Workflow,
 } from "lucide-react";
 import { ServiceCard } from "@/components/ServiceCard";
