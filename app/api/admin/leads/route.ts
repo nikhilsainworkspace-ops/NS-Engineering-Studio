@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import type { Filter } from "mongodb";
 import { getCollection } from "@/lib/db";
 import { getAdminSession } from "@/lib/auth";
 import { privateJson, jsonError } from "@/lib/http";
@@ -14,11 +15,13 @@ export async function GET(request: NextRequest) {
   const session = await getAdminSession();
   if (!session) return jsonError("Authentication required.", 401);
   const query = (request.nextUrl.searchParams.get("q") ?? "").trim().slice(0, 100);
-  const status = request.nextUrl.searchParams.get("status") ?? "all";
-  if (!["all", "new", "in_progress", "resolved"].includes(status)) return jsonError("Invalid filter.", 400);
+  const statusParam = request.nextUrl.searchParams.get("status") ?? "all";
+  const allowedStatuses = ["all", "new", "in_progress", "resolved"] as const;
+  if (!allowedStatuses.includes(statusParam as (typeof allowedStatuses)[number])) return jsonError("Invalid filter.", 400);
+  const status = statusParam as (typeof allowedStatuses)[number];
   try {
     const leads = await getCollection<LeadDoc>("leads");
-    const filter: Record<string, unknown> = {};
+    const filter: Filter<LeadDoc> = {};
     if (status !== "all") filter.status = status;
     if (query) {
       const regex = new RegExp(escapeRegex(query), "i");
@@ -38,7 +41,10 @@ export async function PATCH(request: NextRequest) {
   let raw: unknown;
   try { raw = await request.json(); } catch { return jsonError("Invalid request.", 400); }
   if (!raw || typeof raw !== "object" || !("id" in raw) || typeof raw.id !== "string" || !/^[0-9a-f-]{36}$/i.test(raw.id)) return jsonError("Invalid inquiry reference.", 400);
-  const { id, ...values } = raw as Record<string, unknown>;
+  const payload = raw as Record<string, unknown>;
+  const id = payload.id as string;
+  const values = { ...payload };
+  delete values.id;
   const parsed = leadUpdateSchema.safeParse(values);
   if (!parsed.success) return jsonError("Please check the status and notes.", 422);
   try {
@@ -57,11 +63,12 @@ export async function DELETE(request: NextRequest) {
   let raw: unknown;
   try { raw = await request.json(); } catch { return jsonError("Invalid request.", 400); }
   if (!raw || typeof raw !== "object" || !("id" in raw) || typeof raw.id !== "string" || !/^[0-9a-f-]{36}$/i.test(raw.id) || !("confirm" in raw) || raw.confirm !== true) return jsonError("A valid reference and deletion confirmation are required.", 400);
+  const id = raw.id;
   try {
     const leads = await getCollection<LeadDoc>("leads");
-    const result = await leads.deleteOne({ _id: raw.id });
+    const result = await leads.deleteOne({ _id: id });
     if (!result.deletedCount) return jsonError("This inquiry could not be found.", 404);
-    await writeAudit("lead.deleted", raw.id);
+    await writeAudit("lead.deleted", id);
     return privateJson({ ok: true });
   } catch { return jsonError("The inquiry could not be deleted. Please retry.", 503); }
 }

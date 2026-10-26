@@ -1,4 +1,4 @@
-import { MongoClient } from "mongodb";
+import { MongoClient, type Document } from "mongodb";
 import { STARTER_FAQS, STARTER_SERVICES } from "../lib/brand.ts";
 
 const uri = process.env.MONGODB_URI;
@@ -11,7 +11,8 @@ if (!uri) {
 const client = new MongoClient(uri, { maxPoolSize: 3, serverSelectionTimeoutMS: 5000, connectTimeoutMS: 5000, appName: "ns-studio-seed" });
 try {
   await client.connect();
-  const collection = client.db(dbName).collection("content");
+  type SeedContent = Document & { _id: string; type: "services" | "faqs" };
+  const collection = client.db(dbName).collection<SeedContent>("content");
   const now = new Date();
   let inserted = 0;
   for (const [type, items] of [["services", STARTER_SERVICES], ["faqs", STARTER_FAQS]] as const) {
