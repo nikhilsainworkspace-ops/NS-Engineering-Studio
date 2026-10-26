@@ -11,7 +11,7 @@
 - Added and linked the `/products` directory. Updated About, FAQ, Process, Services and Contact copy for civil engineering, architecture, construction, BOQ/quantity surveying, site/QC workflows, professional learning and cost/margin visibility.
 - Retained the uploaded NS identity and black/ivory/gold design language; created responsive product cards and capability sections for mobile and desktop.
 - Fixed administrator readiness diagnostics. The login page now names which of `MONGODB_URI`, `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH` or `AUTH_SECRET` is absent/invalid without printing values. Admin checks are independent from optional public-site variables; escaped dollar signs in Argon2id hashes are normalized.
-- Updated the `.env.example` and README instructions: Vercel needs raw hash text and the correct environment (Production/Preview/Development) plus a redeploy; local `.env.local` values must escape literal `$` characters as `\$` because Next.js expands environment references.
+- Updated `.env.example`, README, and validation guidance: raw generated hashes and escaped-dollar hashes are accepted; `.env.local` must escape `$` because Next.js expands values in env files. Hash normalization handles extra escape layers and accidental copied assignment/command text while keeping the Argon2id requirement. Ensure the correct Vercel environment is selected and redeploy.
 - Changed the Node engine declaration to `22.x` instead of a floating `>=20.9.0` range to avoid automatic major-version drift.
 - Preserved owner-edited MongoDB content; unedited generic starter records are retired/migrated to the current civil/architecture product copy.
 
@@ -36,9 +36,17 @@
 1. On a network-enabled checkout, run `npm install` and commit the resulting complete `package-lock.json`; use the lockfile produced by that exact package manifest.
 2. Run `npm run typecheck`, `npm run lint`, `npm test`, `npm run test:source`, and `npm run build`. Resolve all errors before production.
 3. Run `npx playwright install chromium` and `npm run test:e2e`.
-4. Set `MONGODB_URI`, `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH` and `AUTH_SECRET` for the exact Vercel environment used by the deployment. Use the raw Argon2id hash from `npm run admin:hash`, set the correct HTTPS `NEXT_PUBLIC_SITE_URL`, save values and redeploy.
+4. Set `MONGODB_URI`, `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH` and `AUTH_SECRET` for the exact Vercel environment used by the deployment. Use the Argon2id hash from `npm run admin:hash` for `ADMIN_PASSWORD_HASH` (raw in Vercel dashboard; escaped dollar signs in `.env.local`), set the correct HTTPS `NEXT_PUBLIC_SITE_URL`, save values and redeploy.
 5. Open `/admin/login`: it should list any missing/invalid environment checks without exposing secrets. If the form unlocks but login returns a service error, verify MongoDB Atlas network access, database user permissions, URL-encoded special characters in credentials, and that the database is reachable from Vercel.
 6. Submit a test contact inquiry; confirm that it persists in the admin inbox, can be status-updated and deleted, and any configured email notification behaves as expected. Test external product links, keyboard navigation, and 320px-wide mobile layout.
 7. Review Privacy and Terms templates with qualified counsel before relying on them. Configure the real domain/DNS and verify Vercel production deployment before announcing a worldwide launch.
 
 **Release status:** Updated source and source-level checks are packaged. A fully resolved dependency lockfile, clean framework build, live database/auth tests and verified Vercel deployment remain release gates; no worldwide launch is claimed until those pass.
+
+## Follow-up admin hash patch (October 26, 2026)
+
+- The `ADMIN_PASSWORD_HASH` normalizer accepts raw hashes, escaped dollar signs (including repeated escape layers), matching quotes, a pasted `ADMIN_PASSWORD_HASH=` assignment, or terminal output surrounding a complete encoded hash. It continues to require an Argon2id encoded value and verifies the actual password with Argon2 on login; it does not turn off authentication.
+- Expanded `tests/env.test.ts` with escape-layer, pasted-assignment, and pasted-command-output cases.
+- Re-verified the dependency-free repository/source checks: `node --test tests/project.test.mjs` passed 7/7; `node --check scripts/hash-password.mjs` passed; standalone normalization fixtures passed for raw, escaped, doubly escaped, assignment, and quoted values.
+- The Vitest suite and full Next.js production build were not run for this patch because project dependencies are not installed in this workspace. After replacing the files, commit/push and confirm the Vercel deployment's TypeScript check/build.
+- Important: this patch cannot create missing Vercel credentials. If the login page reports `ADMIN_PASSWORD_HASH` as missing (rather than malformed), verify that the variable is present in the environment serving that deployment (Production vs Preview), save it, and redeploy. If it reports malformed, regenerate the hash with `npm run admin:hash`, set the value as documented, and redeploy.

@@ -27,6 +27,40 @@ describe("admin configuration readiness", () => {
     expect(getAdminEnv().ADMIN_PASSWORD_HASH).toBe(validHash);
   });
 
+  it("accepts the Vercel-escaped hash and normalizes multiple escape layers", () => {
+    vi.stubEnv("MONGODB_URI", "mongodb+srv://app:secret@cluster.example.mongodb.net/ns_studio");
+    vi.stubEnv("ADMIN_EMAIL", "admin@example.com");
+    vi.stubEnv("ADMIN_PASSWORD_HASH", validHash.replaceAll("$", "\\$"));
+    vi.stubEnv("AUTH_SECRET", "x".repeat(48));
+    expect(adminConfigurationStatus().configured).toBe(true);
+    expect(getAdminEnv().ADMIN_PASSWORD_HASH).toBe(validHash);
+
+    vi.stubEnv("ADMIN_PASSWORD_HASH", validHash.replaceAll("$", "\\\\$"));
+    expect(adminConfigurationStatus().configured).toBe(true);
+    expect(getAdminEnv().ADMIN_PASSWORD_HASH).toBe(validHash);
+  });
+
+  it("accepts an accidentally copied environment assignment without weakening hash validation", () => {
+    vi.stubEnv("MONGODB_URI", "mongodb+srv://app:secret@cluster.example.mongodb.net/ns_studio");
+    vi.stubEnv("ADMIN_EMAIL", "admin@example.com");
+    vi.stubEnv("ADMIN_PASSWORD_HASH", `ADMIN_PASSWORD_HASH=${validHash.replaceAll("$", "\\$")}`);
+    vi.stubEnv("AUTH_SECRET", "x".repeat(48));
+    expect(adminConfigurationStatus().configured).toBe(true);
+    expect(getAdminEnv().ADMIN_PASSWORD_HASH).toBe(validHash);
+
+    vi.stubEnv("ADMIN_PASSWORD_HASH", "not-a-password-hash");
+    expect(adminConfigurationStatus().configured).toBe(false);
+  });
+
+  it("extracts the hash when command output was accidentally copied with it", () => {
+    vi.stubEnv("MONGODB_URI", "mongodb+srv://app:secret@cluster.example.mongodb.net/ns_studio");
+    vi.stubEnv("ADMIN_EMAIL", "admin@example.com");
+    vi.stubEnv("ADMIN_PASSWORD_HASH", `Copy this value to ADMIN_PASSWORD_HASH:\n${validHash}\nThe password itself was not printed.`);
+    vi.stubEnv("AUTH_SECRET", "x".repeat(48));
+    expect(adminConfigurationStatus().configured).toBe(true);
+    expect(getAdminEnv().ADMIN_PASSWORD_HASH).toBe(validHash);
+  });
+
   it("shows safe, actionable setup issues for missing values", () => {
     vi.stubEnv("MONGODB_URI", "");
     vi.stubEnv("ADMIN_EMAIL", "");

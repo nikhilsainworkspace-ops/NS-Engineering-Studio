@@ -22,17 +22,29 @@ const envSchema = z.object({
 export type AppEnv = z.infer<typeof envSchema>;
 
 /**
- * Vercel stores values as entered, while .env files can interpret `$` sequences.
- * Accept a raw value, a quoted value, or the escaped `\$argon2id\$...` form
- * that people sometimes copy from an .env file. Never log normalized values.
+ * Clean a configured value without ever logging it. Vercel and dotenv-style
+ * files can treat `$NAME` as variable expansion. For password hashes, accept
+ * the literal-dollar form, escaped dollar signs (`\$`), extra escape layers,
+ * and a full `ADMIN_PASSWORD_HASH=...` assignment copied by mistake.
  */
 function cleanValue(value: string | undefined, unescapeDollar = false): string | undefined {
   if (typeof value !== "string") return undefined;
-  let result = value.trim();
+  let result = value.trim().replace(/[\u200B-\u200D\uFEFF]/g, "");
   if (result.length >= 2 && ((result.startsWith('"') && result.endsWith('"')) || (result.startsWith("'") && result.endsWith("'")))) {
     result = result.slice(1, -1).trim();
   }
-  if (unescapeDollar) result = result.replace(/\\\$/g, "$");
+  if (unescapeDollar) {
+    result = result.replace(/^(?:export\s+)?ADMIN_PASSWORD_HASH\s*=\s*/i, "");
+    result = result.replace(/\\+\$/g, "$").trim();
+    if (result.length >= 2 && ((result.startsWith('"') && result.endsWith('"')) || (result.startsWith("'") && result.endsWith("'")))) {
+      result = result.slice(1, -1).trim();
+    }
+    // If a user accidentally copied the command's surrounding output, retain
+    // only the actual encoded hash. The encoded value is still verified by
+    // Argon2 on login; this does not accept a plain-text password.
+    const encodedHash = result.match(/\$argon2id\$v=\d+\$[A-Za-z0-9=,]+\$[A-Za-z0-9+/]+={0,2}\$[A-Za-z0-9+/]+={0,2}(?=$|[\s"'`,;])/);
+    if (encodedHash) result = encodedHash[0];
+  }
   return result.length ? result : undefined;
 }
 
@@ -110,7 +122,9 @@ export function adminConfigurationStatus(): AdminConfigurationStatus {
   const passwordHash = env.ADMIN_PASSWORD_HASH ?? "";
   // Encoded Argon2 hashes have this structure: $argon2id$v=19$params$salt$hash.
   if (!/^\$argon2id\$v=\d+\$[^$]+\$[^$]+\$[^$]+$/.test(passwordHash)) {
-    issues.push("ADMIN_PASSWORD_HASH is missing or is not an Argon2id hash. Run `npm run admin:hash` and paste the generated hash value without surrounding quotes.");
+    issues.push(passwordHash
+      ? "The value reaching the app is not a complete Argon2id hash. Run `npm run admin:hash` and copy only the full `$argon2id$...` value—not the password or `ADMIN_PASSWORD_HASH=` label. In `.env.local`, escape each `$` as `\\$`; if a Vercel dashboard value still fails, retry with each `$` escaped as `\\$`, then save and redeploy."
+      : "ADMIN_PASSWORD_HASH is missing from this deployment. Run `npm run admin:hash`, set the generated hash as `ADMIN_PASSWORD_HASH` for the deployment's Vercel environment, then redeploy.");
   }
 
   const secret = env.AUTH_SECRET ?? "";
