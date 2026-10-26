@@ -3,7 +3,7 @@ import { getSiteSettings } from "@/lib/settings";
 import { getPublicOrigin } from "@/lib/public-config";
 import "./globals.css";
 
-export const viewport: Viewport = { themeColor: "#08090a", colorScheme: "dark", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#0a0b0d", colorScheme: "dark", width: "device-width", initialScale: 1 };
 
 export async function generateMetadata(): Promise<Metadata> {
   const settings = await getSiteSettings();

@@ -10,7 +10,7 @@ const envSchema = z.object({
   ADMIN_PASSWORD_HASH: optionalString,
   AUTH_SECRET: optionalString,
   NEXT_PUBLIC_SITE_URL: z.string().url().default("http://localhost:3000"),
-  NEXT_PUBLIC_SITE_NAME: z.string().min(1).default("NS Studio"),
+  NEXT_PUBLIC_SITE_NAME: z.string().min(1).default("NS Engineering Studio"),
   NEXT_PUBLIC_CONTACT_PHONE: z.string().default("7703977002"),
   NEXT_PUBLIC_CONTACT_EMAIL: optionalString,
   NEXT_PUBLIC_WHATSAPP_NUMBER: optionalString,

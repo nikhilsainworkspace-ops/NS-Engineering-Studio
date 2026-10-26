@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const metadata: Metadata = { title: "Terms of use", description: "Starter website terms for NS Studio. Owner review is required before launch." };
+export const metadata: Metadata = { title: "Terms of use", description: "Starter website terms for NS Engineering Studio. Owner review is required before launch." };
 export default function TermsPage() {
   return <>
     <section className="page-hero"><div className="shell page-hero-inner"><nav className="breadcrumbs" aria-label="Breadcrumb"><Link href="/">Home</Link><span aria-hidden="true">/</span><span aria-current="page">Terms</span></nav><span className="eyebrow">TERMS OF USE</span><h1>Clear terms make<br /><span>better expectations.</span></h1><p>This starter page is provided for editing. It has not been reviewed by a lawyer and should be checked against the business's services and applicable law.</p></div></section>

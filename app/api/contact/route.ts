@@ -8,7 +8,7 @@ import { isSameOrigin, jsonError } from "@/lib/http";
 import { sendLeadNotification } from "@/lib/email";
 import { writeAudit } from "@/lib/audit";
 
-type LeadDoc = { _id: string; requestKey?: string; name: string; email: string; phone: string; subject: string; message: string; status: "new" | "in_progress" | "resolved"; notes: string; createdAt: Date; updatedAt: Date };
+type LeadDoc = { _id: string; requestKey?: string; name: string; email: string; phone: string; subject: string; projectType?: string; timeline?: string; message: string; status: "new" | "in_progress" | "resolved"; notes: string; createdAt: Date; updatedAt: Date };
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -49,6 +49,8 @@ export async function POST(request: NextRequest) {
       email: parsed.data.email,
       phone: parsed.data.phone,
       subject: parsed.data.subject,
+      projectType: parsed.data.projectType,
+      timeline: parsed.data.timeline,
       message: parsed.data.message,
       status: "new",
       notes: "",
@@ -64,7 +66,7 @@ export async function POST(request: NextRequest) {
       }
       throw error;
     }
-    const notification = await sendLeadNotification({ id: leadId, name: lead.name, email: lead.email, phone: lead.phone, subject: lead.subject, message: lead.message });
+    const notification = await sendLeadNotification({ id: leadId, name: lead.name, email: lead.email, phone: lead.phone, subject: lead.subject, projectType: lead.projectType ?? "Not sure yet", timeline: lead.timeline ?? "Not decided yet", message: lead.message });
     await writeAudit("lead.created", leadId, "system");
     if (notification === "failed") console.error("A saved inquiry could not trigger the optional email notification.");
     return Response.json({ message: "Your inquiry has been received by the website. The site administrator can now review it.", reference: leadId }, { status: 201, headers: { "Cache-Control": "no-store" } });

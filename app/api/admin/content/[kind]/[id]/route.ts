@@ -29,7 +29,7 @@ export async function PATCH(request: NextRequest, context: Params) {
     await getDb();
     const collection = await getCollection<ContentDoc>("content");
     const now = new Date();
-    await collection.updateOne({ _id: id, type: kind }, { $set: { ...parsed.data, type: kind, slug: id, isStarter: false, deleted: false, updatedAt: now }, $setOnInsert: { createdAt: now } }, { upsert: true });
+    await collection.updateOne({ _id: id, type: kind }, { $set: { ...parsed.data, type: kind, isStarter: false, deleted: false, updatedAt: now }, $setOnInsert: { createdAt: now } }, { upsert: true });
     await writeAudit(`content.${kind}.updated`, id);
     return privateJson({ ok: true });
   } catch { return jsonError("Content could not be updated. Please retry.", 503); }

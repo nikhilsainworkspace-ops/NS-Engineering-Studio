@@ -1,8 +1,8 @@
 {
-  "name": "ns-studio-website",
+  "name": "ns-engineering-studio",
   "version": "1.0.0",
   "private": true,
-  "description": "NS Studio public website and protected MongoDB-backed admin",
+  "description": "NS Engineering Studio website and protected MongoDB-backed admin",
   "engines": {
     "node": ">=20.9.0"
   },

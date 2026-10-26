@@ -5,7 +5,7 @@ import { ContactForm } from "@/components/ContactForm";
 import { getSiteSettings } from "@/lib/settings";
 import { getWhatsappUrl } from "@/lib/public-config";
 
-export const metadata: Metadata = { title: "Contact", description: "Contact NS Studio or send an inquiry through the private website contact form." };
+export const metadata: Metadata = { title: "Contact", description: "Discuss a digital product, website, integration or technical challenge with NS Engineering Studio." };
 export const dynamic = "force-dynamic";
 
 export default async function ContactPage() {

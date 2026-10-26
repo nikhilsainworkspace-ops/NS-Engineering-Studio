@@ -7,6 +7,8 @@ const validContact = {
   email: "JAMIE@EXAMPLE.COM",
   phone: "7703977002",
   subject: "Question about services",
+  projectType: "Web engineering",
+  timeline: "1–3 months",
   message: "I would like to understand the scope of the service.",
   consent: true,
   website: "",
@@ -17,7 +19,15 @@ describe("contact validation", () => {
   it("normalizes email casing and accepts valid consented inquiries", () => {
     const result = contactSchema.safeParse(validContact);
     expect(result.success).toBe(true);
-    if (result.success) expect(result.data.email).toBe("jamie@example.com");
+    if (result.success) {
+      expect(result.data.email).toBe("jamie@example.com");
+      expect(result.data.projectType).toBe("Web engineering");
+      expect(result.data.timeline).toBe("1–3 months");
+    }
+  });
+  it("rejects unsupported project options instead of storing arbitrary values", () => {
+    expect(contactSchema.safeParse({ ...validContact, projectType: "root access" }).success).toBe(false);
+    expect(contactSchema.safeParse({ ...validContact, timeline: "tomorrow, guaranteed" }).success).toBe(false);
   });
   it("rejects an inquiry without explicit consent", () => {
     expect(contactSchema.safeParse({ ...validContact, consent: false }).success).toBe(false);

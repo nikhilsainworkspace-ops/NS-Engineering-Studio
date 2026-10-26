@@ -1,16 +1,16 @@
-# NS Studio — Next.js website + private admin
+# NS Engineering Studio — Next.js website + private admin
 
-A responsive, dark editorial website built around the supplied black, white and gold **NS** monogram. The brand mark is retained as supplied in `public/brand/ns-logo-original.png`; the site uses a small set of matching black/gold/cream design tokens in `app/globals.css`.
+A responsive, premium engineering-studio website built around the supplied black, white and gold **NS** monogram. The site uses an editorial black/graphite foundation, warm gold accents and a contrasting ivory capabilities section. The original mark is retained at `public/brand/ns-logo-original.png`; visual tokens live in `app/globals.css`.
 
-**Brand/category assumption:** the logo itself does not reliably identify a business name or industry. `NS Studio` and the professional-services language in this starter are editable working defaults, not a statement that a real business has those services or a supplied business history. Starter services and FAQs contain no customer testimonials, fabricated reviews, certifications, results or invented statistics. The public site displays a small starter-content notice until an administrator disables it after reviewing the content. Privacy and terms pages are starter templates and require owner/legal review.
+**Brand/category assumption:** the uploaded logo provides the NS mark, while the supplied repository name `NS-Engineering-Studio` supports the working name **NS Engineering Studio** and a digital-product/software-engineering category. The service areas are proposed starter offerings and should be checked against the actual business before launch. No client work, testimonials, customer counts, awards, certifications, results or invented statistics are presented. The editable Privacy and Terms pages remain starter templates and require owner/legal review.
 
 ## What is included
 
 - Next.js App Router, React, strict TypeScript, Tailwind CSS 4 and Lucide icons.
 - Public home, about, services index, individual service pages, contact, FAQ, privacy and terms pages; branded 404, loading and error states.
 - Supplied logo in the header, footer and hero; original retained under `public/brand/`. PNG icons at 16×16, 32×32, 180×180, 192×192 and 512×512, ICO, SVG favicon, web manifest and 1200×630 social preview.
-- Responsive accessible navigation, keyboard-operable native disclosure FAQs, reduced-motion support, visible focus states and a skip link.
-- Contact form with server-side Zod validation, same-origin checks, honeypot, MongoDB-backed fixed-window rate limit, idempotency key, safe error states, private lead storage and optional Resend notification.
+- Responsive accessible navigation with sticky compact header, a custom CSS architecture illustration, keyboard-operable native disclosure FAQs, reduced-motion support, visible focus states and a skip link.
+- Project inquiry form with server-side Zod validation, topic and timeline selectors, same-origin checks, honeypot, MongoDB-backed fixed-window rate limit, idempotency key, duplicate-submit protection, safe error states, private lead storage and optional Resend notification. Project area and timeline are available in the protected admin inbox.
 - `/admin/login` plus protected `/admin`, with an Argon2id hash-based credential, HMAC-protected random session tokens, HTTP-only cookies, eight-hour session expiration, DB revocation on logout, login rate limiting and audit records.
 - Admin overview, inquiry search/status/notes/delete, service CRUD, FAQ CRUD, brand/contact/SEO/homepage settings, publishing controls and confirmation for deletes. Writes are persisted to MongoDB.
 - Server-only environment validation, pooled MongoDB driver client, indexes, security headers, robots and sitemap.
@@ -18,19 +18,19 @@ A responsive, dark editorial website built around the supplied black, white and 
 
 ## Design and technical decisions
 
-- The logo is the brand source of truth: dark background, warm gold accent, soft cream text and subdued graphite surfaces. CSS custom properties are centralised at the top of `app/globals.css`.
-- No remote photos, third-party fonts, analytics, advertising pixels or cookie-consent UI are enabled by default. The default hero uses the provided logo and CSS geometry to keep the project self-contained and reduce external dependencies.
+- The supplied mark sets the core palette: graphite/black, warm gold, cream text and an ivory content surface for visual contrast. CSS custom properties are centralised in `app/globals.css`; the hero diagram is composed from local CSS and icon primitives, with no remote assets.
+- No remote photos, third-party fonts, analytics, advertising pixels or cookie-consent UI are enabled by default. The hero uses a diagram of the product process, supported by the supplied logo mark and CSS geometry, to keep the project self-contained and reduce external dependencies.
 - Server Components are used for public pages; client-side code is limited to menus and the form/admin interactions. Every admin API operation checks the session in the handler itself; hiding an admin control is not treated as authorization.
 - Contact leads, editable settings, content, sessions, rate limits and security audit events use MongoDB. MongoDB is not replaced by localStorage or in-memory storage. If Atlas is unavailable, public pages can fall back to the illustrative static content, but lead submission and admin writes fail truthfully rather than claiming success.
-- Starter services/FAQs can be overridden in the database. Editing updates the stored record; deleting a starter item writes a tombstone so it does not reappear from the static defaults. No automatic production seeding occurs.
+- Starter services/FAQs can be edited in the database. Editing creates an owner-managed version; deleting a starter item writes a tombstone. Untouched starter records from the earlier NS Studio starter are updated from the new defaults without overwriting items marked as edited. No automatic production seeding occurs.
 - File uploads are intentionally not shown in Admin because no durable media-storage credential was supplied. Place a licensed asset under `public/brand/` and set `logoPath` to a local `/brand/...` URL. Do not store uploads on the Vercel function filesystem.
 - The admin has no built-in default login. It remains locked until database and credential configuration is valid. Rotate credentials through environment variables and redeploy; there is no password-reset email integration by default.
 
 ### Official references reviewed
 
-Package versions below were checked against current package listings at authoring time (October 26, 2026). Use current advisories and compatibility notes before future upgrades.
+The package pins are retained from the supplied repository and were not broadly upgraded during this visual/feature refresh to avoid introducing unverified major-version changes. The Next.js production checklist recommends running a production build and evaluating accessibility, security, metadata and Core Web Vitals before release. Use current advisory/compatibility notes before future dependency upgrades.
 
-- [Next.js App Router docs](https://nextjs.org/docs/app) · [Installation/system requirements](https://nextjs.org/docs/app/getting-started/installation) · [Route handlers](https://nextjs.org/docs/app/getting-started/route-handlers) · [Environment variables](https://nextjs.org/docs/app/guides/environment-variables)
+- [Next.js App Router docs](https://nextjs.org/docs/app) · [Production checklist](https://nextjs.org/docs/app/guides/production-checklist) · [Installation/system requirements](https://nextjs.org/docs/app/getting-started/installation) · [Route handlers](https://nextjs.org/docs/app/getting-started/route-handlers) · [Environment variables](https://nextjs.org/docs/app/guides/environment-variables)
 - [Tailwind CSS Next.js setup](https://tailwindcss.com/docs/installation/framework-guides/nextjs)
 - [MongoDB Node.js driver](https://www.mongodb.com/docs/drivers/node/current/) · [Connection pools](https://www.mongodb.com/docs/drivers/node/current/connect/connection-options/connection-pools/) · [Atlas IP access lists](https://www.mongodb.com/docs/atlas/security/ip-access-list/)
 - [Argon2 password hashing](https://www.npmjs.com/package/argon2) · [Zod schema validation](https://zod.dev/)
@@ -67,7 +67,7 @@ Set variables in `.env.local` for local development and in Vercel Project → Se
 | `ADMIN_PASSWORD_HASH` | Required for admin | Server-only | Argon2id hash created by `npm run admin:hash`. Never commit it. |
 | `AUTH_SECRET` | Required for admin | Server-only | Random secret, at least 32 characters, used to HMAC session tokens and hash rate-limit identifiers. |
 | `NEXT_PUBLIC_SITE_URL` | Strongly required for canonical URLs | Public | Full origin, e.g. `https://www.example.com`. Use your actual production domain in Production. |
-| `NEXT_PUBLIC_SITE_NAME` | Optional; defaults to `NS Studio` | Public | Site name used for initial settings if there is no saved settings record. |
+| `NEXT_PUBLIC_SITE_NAME` | Optional; defaults to `NS Engineering Studio` | Public | Site name used for initial settings if there is no saved settings record. |
 | `NEXT_PUBLIC_CONTACT_PHONE` | Optional; defaults to `7703977002` | Public | Initial phone setting. The owner can also edit it under Admin → Site settings. |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | Optional | Public | Initial displayed contact email; leave empty if none is supplied. |
 | `NEXT_PUBLIC_WHATSAPP_NUMBER` | Optional | Public | Complete international digits-only number (11–15 digits in this starter, including country code). Leave blank to hide WhatsApp. Never derive the country code from the supplied phone. |
@@ -131,7 +131,7 @@ npm run test:e2e
 ## GitHub → Vercel deployment
 
 1. Regenerate/commit the complete package lock with `npm install` on a network-enabled machine. Run type-check, lint, tests and a clean production build; address any warnings relevant to the changed source.
-2. Create a new, private or public GitHub repository as appropriate. From the project root: `git init`, `git add .`, `git commit -m "Initial NS Studio website"`, set your new repository as `origin`, then push the `main` branch. Inspect `git status` and the staged file list first; `.env.local`, `.env*` except `.env.example`, `node_modules`, `.next`, logs and backups are gitignored.
+2. Create a new, private or public GitHub repository as appropriate. From the project root: `git init`, `git add .`, `git commit -m "Initial NS Engineering Studio website"`, set your new repository as `origin`, then push the `main` branch. Inspect `git status` and the staged file list first; `.env.local`, `.env*` except `.env.example`, `node_modules`, `.next`, logs and backups are gitignored.
 3. In Vercel choose **Add New → Project**, import the GitHub repo and keep the Next.js framework preset. Build command should be `npm run build`; the output directory should remain the framework default. Set Node.js 22.x (or another version supported by your chosen Next.js release). Do not commit secrets to fix a build error.
 4. Add environment variables for the correct environments. Production needs `MONGODB_URI`, `MONGODB_DB`, `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH`, `AUTH_SECRET`, `NEXT_PUBLIC_SITE_URL`, `NEXT_PUBLIC_SITE_NAME`, and `NEXT_PUBLIC_CONTACT_PHONE`. Add the optional email values only when configured. Preview environments should use an intentional preview URL and preferably a separate database and admin credentials.
 5. Deploy. Add the real domain through Vercel Project → Settings → Domains, update DNS as Vercel instructs, wait for domain/HTTPS verification, and change `NEXT_PUBLIC_SITE_URL` to the canonical production origin; redeploy so canonical, Open Graph and sitemap links use it.

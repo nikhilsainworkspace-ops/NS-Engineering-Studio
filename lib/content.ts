@@ -20,7 +20,13 @@ export async function getContent<T extends ServiceItem | FaqItem>(kind: ContentK
   for (const starter of defaults(kind)) {
     const override = bySlug.get(starter.slug);
     if (override?.deleted) continue;
-    const merged = { ...starter, ...(override ?? {}), isStarter: override ? Boolean(override.isStarter) : true } as unknown as T;
+    // Unedited starter records from an older deployment follow the current bundled starter copy.
+    // Admin edits set isStarter=false, so owner-customised content is never overwritten here.
+    const merged = (override?.isStarter
+      ? { ...starter, isStarter: true }
+      : override
+        ? { ...starter, ...override, isStarter: false }
+        : { ...starter, isStarter: true }) as unknown as T;
     if (!publishedOnly || merged.published) output.push(merged);
     bySlug.delete(starter.slug);
   }

@@ -1,7 +1,7 @@
 import "server-only";
 import { emailIsConfigured, getEnv } from "@/lib/env";
 
-export async function sendLeadNotification(lead: { id: string; name: string; email: string; phone: string; subject: string; message: string }): Promise<"sent" | "disabled" | "failed"> {
+export async function sendLeadNotification(lead: { id: string; name: string; email: string; phone: string; subject: string; projectType?: string; timeline?: string; message: string }): Promise<"sent" | "disabled" | "failed"> {
   if (!emailIsConfigured()) return "disabled";
   const env = getEnv();
   const text = [
@@ -11,6 +11,8 @@ export async function sendLeadNotification(lead: { id: string; name: string; ema
     `Email: ${lead.email}`,
     `Phone: ${lead.phone || "Not supplied"}`,
     `Subject: ${lead.subject}`,
+    `Area of interest: ${lead.projectType || "Not sure yet"}`,
+    `Preferred timeline: ${lead.timeline || "Not decided yet"}`,
     "",
     lead.message
   ].join("\n");
