@@ -1,0 +1,1 @@
+export default function SiteLoading() { return <section className="section"><div className="shell"><span className="eyebrow">NS STUDIO</span><h1 style={{ color: "var(--color-cream)", fontFamily: "Georgia, serif", fontWeight: 400 }}>Preparing your page…</h1><p style={{ color: "var(--color-muted)" }}>The content is loading.</p></div></section>; }

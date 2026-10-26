@@ -1,0 +1,2 @@
+import Link from "next/link";
+export default function NotFound() { return <main id="main-content" className="section"><div className="shell" style={{ maxWidth: 700, textAlign: "center" }}><span className="eyebrow">404 / NOT FOUND</span><h1 style={{ fontFamily: "Georgia, serif", fontWeight: 400, fontSize: "clamp(42px, 8vw, 64px)" }}>Page not found</h1><p style={{ color: "var(--color-muted)" }}>That address does not match a page here.</p><Link href="/" className="button button-primary" style={{ marginTop: 16 }}>Return home</Link></div></main>; }
