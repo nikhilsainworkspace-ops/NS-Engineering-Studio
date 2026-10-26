@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
     description: settings.siteDescription,
     applicationName: settings.brandName,
     alternates: { canonical: "/" },
-    openGraph: { type: "website", locale: "en_IN", siteName: settings.brandName, title: settings.siteTitle, description: settings.siteDescription, url: origin, images: [{ url: "/brand/social-preview.png", width: 1200, height: 630, alt: `${settings.brandName} — white and gold monogram on black` }] },
+    openGraph: { type: "website", locale: "en_IN", siteName: settings.brandName, title: settings.siteTitle, description: settings.siteDescription, url: origin, images: [{ url: "/brand/social-preview.png", width: 1200, height: 630, alt: `${settings.brandName} — practical products for civil engineering, architecture and construction` }] },
     twitter: { card: "summary_large_image", title: settings.siteTitle, description: settings.siteDescription, images: ["/brand/social-preview.png"] },
     icons: { icon: [{ url: "/favicon.svg", type: "image/svg+xml" }, { url: "/favicon.ico", sizes: "any" }, { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" }, { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" }], apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }] },
     manifest: "/site.webmanifest",

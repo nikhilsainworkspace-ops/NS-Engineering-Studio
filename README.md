@@ -1,15 +1,15 @@
-# NS Engineering Studio — Next.js website + private admin
+# NS Engineering Studio — Civil Engineering Product Ecosystem
 
-A responsive, premium engineering-studio website built around the supplied black, white and gold **NS** monogram. The site uses an editorial black/graphite foundation, warm gold accents and a contrasting ivory capabilities section. The original mark is retained at `public/brand/ns-logo-original.png`; visual tokens live in `app/globals.css`.
+A responsive, premium product-ecosystem website built around the supplied black, white and gold **NS** monogram. The site introduces two distinct official products: **CivilMargin** for civil construction project cost and margin visibility, and **Civil At Hand** for civil engineering/architecture learning, practical tools, mentorship and career resources. The original NS mark is retained at `public/brand/ns-logo-original.png`; visual tokens live in `app/globals.css`.
 
-**Brand/category assumption:** the uploaded logo provides the NS mark, while the supplied repository name `NS-Engineering-Studio` supports the working name **NS Engineering Studio** and a digital-product/software-engineering category. The service areas are proposed starter offerings and should be checked against the actual business before launch. No client work, testimonials, customer counts, awards, certifications, results or invented statistics are presented. The editable Privacy and Terms pages remain starter templates and require owner/legal review.
+**Brand and content basis:** the supplied repository name supports **NS Engineering Studio** as the parent brand, and the two product URLs were supplied in the brief. Product descriptions were checked against the current official websites. Product availability, plans and exact capabilities can change, so each product card links to its own official site. The site does not invent client work, testimonials, customer counts, awards, certifications, results or invented statistics. The editable Privacy and Terms pages remain starter templates and require owner/legal review.
 
 ## What is included
 
 - Next.js App Router, React, strict TypeScript, Tailwind CSS 4 and Lucide icons.
-- Public home, about, services index, individual service pages, contact, FAQ, privacy and terms pages; branded 404, loading and error states.
+- Public home, product directory at `/products`, about, built-world focus areas and detail pages, contact, FAQ, privacy and terms pages; branded 404, loading and error states.
 - Supplied logo in the header, footer and hero; original retained under `public/brand/`. PNG icons at 16×16, 32×32, 180×180, 192×192 and 512×512, ICO, SVG favicon, web manifest and 1200×630 social preview.
-- Responsive accessible navigation with sticky compact header, a custom CSS architecture illustration, keyboard-operable native disclosure FAQs, reduced-motion support, visible focus states and a skip link.
+- Responsive accessible navigation with direct product discovery, high-contrast CivilMargin/Civil At Hand cards, audience pathways, an interactive mobile menu, keyboard-operable native disclosure FAQs, reduced-motion support, visible focus states and a skip link.
 - Project inquiry form with server-side Zod validation, topic and timeline selectors, same-origin checks, honeypot, MongoDB-backed fixed-window rate limit, idempotency key, duplicate-submit protection, safe error states, private lead storage and optional Resend notification. Project area and timeline are available in the protected admin inbox.
 - `/admin/login` plus protected `/admin`, with an Argon2id hash-based credential, HMAC-protected random session tokens, HTTP-only cookies, eight-hour session expiration, DB revocation on logout, login rate limiting and audit records.
 - Admin overview, inquiry search/status/notes/delete, service CRUD, FAQ CRUD, brand/contact/SEO/homepage settings, publishing controls and confirmation for deletes. Writes are persisted to MongoDB.
@@ -19,12 +19,12 @@ A responsive, premium engineering-studio website built around the supplied black
 ## Design and technical decisions
 
 - The supplied mark sets the core palette: graphite/black, warm gold, cream text and an ivory content surface for visual contrast. CSS custom properties are centralised in `app/globals.css`; the hero diagram is composed from local CSS and icon primitives, with no remote assets.
-- No remote photos, third-party fonts, analytics, advertising pixels or cookie-consent UI are enabled by default. The hero uses a diagram of the product process, supported by the supplied logo mark and CSS geometry, to keep the project self-contained and reduce external dependencies.
+- No remote photos, third-party fonts, analytics, advertising pixels or cookie-consent UI are enabled by default. The product-led home page uses an original CSS-built visual, the supplied NS logo, and direct links to the official CivilMargin and Civil At Hand sites; it does not depend on hotlinked marketing imagery.
 - Server Components are used for public pages; client-side code is limited to menus and the form/admin interactions. Every admin API operation checks the session in the handler itself; hiding an admin control is not treated as authorization.
 - Contact leads, editable settings, content, sessions, rate limits and security audit events use MongoDB. MongoDB is not replaced by localStorage or in-memory storage. If Atlas is unavailable, public pages can fall back to the illustrative static content, but lead submission and admin writes fail truthfully rather than claiming success.
-- Starter services/FAQs can be edited in the database. Editing creates an owner-managed version; deleting a starter item writes a tombstone. Untouched starter records from the earlier NS Studio starter are updated from the new defaults without overwriting items marked as edited. No automatic production seeding occurs.
+- Built-world focus areas and FAQs can be edited in the database. Editing creates an owner-managed version; deleting a starter item writes a tombstone. Unedited records from the earlier generic digital-studio starter are retired so they do not reappear beside the civil product content; owner-edited content is preserved. No automatic production seeding occurs.
 - File uploads are intentionally not shown in Admin because no durable media-storage credential was supplied. Place a licensed asset under `public/brand/` and set `logoPath` to a local `/brand/...` URL. Do not store uploads on the Vercel function filesystem.
-- The admin has no built-in default login. It remains locked until database and credential configuration is valid. Rotate credentials through environment variables and redeploy; there is no password-reset email integration by default.
+- The admin has no built-in default login. The sign-in page now lists safe, specific configuration checks without showing any environment values. The runtime normalizes whitespace, surrounding quotes and `\$` escapes on the Argon2id hash to help with common copy/paste mistakes. It still fails closed unless the MongoDB URI, email, valid Argon2id hash and 32+ character auth secret are present. Rotate credentials through environment variables and redeploy; there is no password-reset email integration by default.
 
 ### Official references reviewed
 
@@ -36,12 +36,13 @@ The package pins are retained from the supplied repository and were not broadly 
 - [Argon2 password hashing](https://www.npmjs.com/package/argon2) · [Zod schema validation](https://zod.dev/)
 - [Resend with Next.js](https://resend.com/nextjs)
 - [Vercel environments](https://vercel.com/docs/deployments/environments) · [Environment variables](https://vercel.com/docs/environment-variables)
+- [CivilMargin official site](https://civilmarzin.civilathand.in/) · [Civil At Hand official site](https://civilathand.in/) · [Civil At Hand about page](https://www.civilathand.in/about)
 
 Package pins: Next.js `16.4.3`, React/React DOM `19.3.0`, Tailwind `4.3.3`, MongoDB driver `7.7.0`, Zod `4.6.5`, Argon2 `0.45.1`, Lucide React `1.61.0`. TypeScript is pinned to `5.9.3` for a conservative compiler baseline. Do not upgrade a single framework peer without reviewing compatibility and rebuilding.
 
 ## Requirements
 
-- Node.js **20.9 or newer** (Node 22 LTS recommended).
+- Node.js **22.x** (the project pins the Node major version in `package.json` for predictable Vercel builds).
 - npm compatible with the Node release.
 - MongoDB Atlas for persistent leads/admin content and sessions.
 - An owner-controlled production domain for canonical metadata and production contact links.
@@ -90,11 +91,11 @@ There are no Cloudinary, Blob, analytics or payment variables because those inte
 
 1. Set `ADMIN_EMAIL` to an owner-controlled address.
 2. Run `npm run admin:hash` in an interactive terminal. The script hides password input and uses Argon2id. Use a unique password of at least 14 characters and keep it in a password manager.
-3. Copy only the generated `$argon2id$...` hash to `ADMIN_PASSWORD_HASH`.
+3. Copy only the generated `$argon2id$...` hash to `ADMIN_PASSWORD_HASH`. In Vercel, paste the raw hash exactly as printed, without quotes or added backslashes. In `.env.local`, because Next.js expands `$NAME` references in `.env` values, escape each dollar sign as `\$`; the app normalizes that escaped form at runtime. In Vercel settings, paste the raw hash exactly as printed, with no extra backslashes or quotes.
 4. Generate an `AUTH_SECRET` locally, for example with `openssl rand -base64 48`, and store it only in local environment/Vercel server variables.
 5. Do not enable admin in a shared preview environment unless the database and credentials are intentionally separated. On credential rotation, update the hash/secret and redeploy; changing the secret invalidates existing sessions. Sessions also expire after eight hours and logout deletes the stored session record.
 
-The login route fails closed if configuration is missing. It returns generic credential errors, rate-limits by a hashed connection identifier, and never logs passwords. Session tokens are random, stored as hashes, HMACed with `AUTH_SECRET`, and kept in `HttpOnly`, `SameSite=Lax` cookies (`Secure` in production). Admin APIs separately authorize every request and require same-origin requests for mutations.
+The login route fails closed if configuration is missing. The login page lists which environment checks are incomplete without revealing values. After correcting any displayed item, make sure its Vercel environment matches the live deployment (normally Production) and redeploy. The route returns generic credential errors, rate-limits by a hashed connection identifier, and never logs passwords. Session tokens are random, stored as hashes, HMACed with `AUTH_SECRET`, and kept in `HttpOnly`, `SameSite=Lax` cookies (`Secure` in production). Admin APIs separately authorize every request and require same-origin requests for mutations.
 
 ### Optional Resend email
 
@@ -139,7 +140,7 @@ npm run test:e2e
 
 ## Post-deployment verification / security checklist
 
-- Open `/`, `/about`, `/services`, a service detail page, `/contact`, `/faq`, `/privacy`, `/terms`, `/robots.txt` and `/sitemap.xml` on mobile and desktop.
+- Open `/`, `/products`, `/about`, `/services`, a focus-area detail page, `/contact`, `/faq`, `/privacy`, `/terms`, `/robots.txt` and `/sitemap.xml` on mobile and desktop. Verify the external CivilMargin and Civil At Hand cards open their official sites in a separate tab.
 - Verify the phone is displayed exactly as `7703977002` unless intentionally changed in Admin; confirm the telephone link works. Verify WhatsApp is absent unless a complete international number has been configured.
 - Submit a valid contact inquiry, confirm the success reference appears only after a database write, verify the lead is private in Admin and test rate limiting/duplicate-submit handling. Test a disconnected/invalid database configuration and confirm the UI reports failure rather than success.
 - Open `/admin` in a private browser. It must redirect to `/admin/login`; protected APIs must return 401 without the session. Test wrong credentials, valid login, session cookie flags, logout/revocation and retry throttling.
@@ -149,7 +150,7 @@ npm run test:e2e
 
 ## Troubleshooting
 
-- **Admin locked:** verify all four required values (`MONGODB_URI`, `ADMIN_EMAIL`, `ADMIN_PASSWORD_HASH`, `AUTH_SECRET`) are set in the right environment, with a valid `$argon2id$` hash and a 32+ character secret. Redeploy after changing Vercel variables.
+- **Admin locked:** `/admin/login` now lists which checks fail. Confirm all four variables are set for the environment used by the deployment (Production for the live domain), save and redeploy. `ADMIN_PASSWORD_HASH` must be the complete Argon2id hash generated by `npm run admin:hash`; in Vercel use the raw value without quotes or backslashes. The code trims outer whitespace and normalizes the escaped `\$` form, but an arbitrary password, bcrypt hash or truncated value is invalid. `AUTH_SECRET` must be at least 32 characters. A valid-looking URI does not prove Atlas connectivity; if sign-in is unlocked but reports a service error, check Atlas network access, username/password URL encoding, and the database name.
 - **Admin login returns a generic service error:** verify Atlas network access, URI encoding, database name and Vercel egress/allowlist settings. No connection string is returned to visitors.
 - **Contact form cannot save:** the form requires a working MongoDB connection; optional email is not required. Inspect server logs for the generic request failure and correct the database connection.
 - **Email notice absent:** verify all three Resend variables, sender verification and recipient address. A saved inquiry remains in the private inbox even if email fails.

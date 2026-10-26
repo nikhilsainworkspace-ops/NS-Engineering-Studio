@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { loginSchema } from "@/lib/validation";
-import { adminIsConfigured, getEnv } from "@/lib/env";
+import { adminIsConfigured, getAdminEnv } from "@/lib/env";
 import { consumeRateLimit, hashIdentifier } from "@/lib/rate-limit";
 import { createAdminSession, verifyAdminPassword } from "@/lib/auth";
 import { isSameOrigin, jsonError, privateJson } from "@/lib/http";
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
   if (!parsed.success) return jsonError("Email or password is incorrect.", 401);
 
   try {
-    const env = getEnv();
+    const env = getAdminEnv();
     const ip = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || request.headers.get("x-real-ip") || "unknown";
     const rate = await consumeRateLimit(`admin-login:${hashIdentifier(ip, env.AUTH_SECRET)}`, 8, 15 * 60 * 1000);
     if (!rate.allowed) {

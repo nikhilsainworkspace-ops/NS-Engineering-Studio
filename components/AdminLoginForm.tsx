@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react";
 import { ArrowRight, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export function AdminLoginForm({ configured }: { configured: boolean }) {
+export function AdminLoginForm({ configured, configIssues = [] }: { configured: boolean; configIssues?: string[] }) {
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -23,7 +23,7 @@ export function AdminLoginForm({ configured }: { configured: boolean }) {
     finally { setPending(false); }
   }
   return <form className="login-form" onSubmit={submit}>
-    {!configured ? <div className="admin-warning" role="status"><strong>Admin is locked.</strong><span>Configure MongoDB, ADMIN_EMAIL, ADMIN_PASSWORD_HASH and AUTH_SECRET in your environment to enable sign-in.</span></div> : null}
+    {!configured ? <div className="admin-warning" role="status"><strong>Admin sign-in is locked until configuration is complete.</strong><span>Only the checks below are shown; secret values are never displayed.</span><ul>{configIssues.map((issue) => <li key={issue}>{issue}</li>)}</ul><span>In Vercel, select the environment for this deployment under Project → Settings → Environment Variables, save the values, then redeploy.</span></div> : null}
     <div className="field"><label htmlFor="admin-email">Administrator email</label><input id="admin-email" name="email" type="email" autoComplete="username" maxLength={254} required disabled={!configured || pending} placeholder="owner@example.com" /></div>
     <div className="field"><label htmlFor="admin-password">Password</label><input id="admin-password" name="password" type="password" autoComplete="current-password" maxLength={1024} required disabled={!configured || pending} placeholder="Your admin password" /></div>
     {error ? <div className="form-feedback error" role="alert">{error}</div> : null}

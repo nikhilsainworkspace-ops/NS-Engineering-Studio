@@ -18,7 +18,7 @@ test("project manifest pins the required application stack", () => {
 test("public, admin, API, docs, and core configuration files exist", () => {
   for (const file of [
     "app/layout.tsx", "app/(site)/page.tsx", "app/(site)/about/page.tsx", "app/(site)/services/page.tsx",
-    "app/(site)/services/[slug]/page.tsx", "app/(site)/contact/page.tsx", "app/(site)/faq/page.tsx", "app/(site)/process/page.tsx",
+    "app/(site)/services/[slug]/page.tsx", "app/(site)/contact/page.tsx", "app/(site)/faq/page.tsx", "app/(site)/process/page.tsx", "app/(site)/products/page.tsx",
     "app/(site)/privacy/page.tsx", "app/(site)/terms/page.tsx", "app/admin/page.tsx", "app/admin/login/page.tsx",
     "app/api/contact/route.ts", "app/api/auth/login/route.ts", "app/api/auth/logout/route.ts",
     "app/api/admin/overview/route.ts", "app/api/admin/leads/route.ts", "app/api/admin/settings/route.ts",
@@ -38,17 +38,22 @@ test("safe repository packaging excludes local environment and generated directo
 });
 
 
-test("premium engineering pages and navigation are connected", () => {
+test("civil engineering product pages and navigation are connected", () => {
   const home = read("app/(site)/page.tsx");
-  const process = read("app/(site)/process/page.tsx");
   const header = read("components/SiteHeader.tsx");
   const sitemap = read("app/sitemap.ts");
-  assert.match(home, /hero-console/);
+  const products = read("app/(site)/products/page.tsx");
+  const brand = read("lib/brand.ts");
+  assert.match(home, /CivilMargin/);
+  assert.match(home, /Civil At Hand/);
+  assert.match(brand, /https:\/\/civilmarzin\.civilathand\.in\//);
+  assert.match(brand, /https:\/\/civilathand\.in\//);
   assert.match(home, /capability-section/);
-  assert.match(process, /Understand the context/);
-  assert.match(process, /Review and improve/);
-  assert.match(header, /href: "\/process"/);
-  assert.match(sitemap, /"\/process"/);
+  assert.match(products, /name: "CivilMargin"/);
+  assert.match(products, /name: "Civil At Hand"/);
+  assert.match(products, /Visit \{product\.name\}/);
+  assert.match(header, /href: "\/products"/);
+  assert.match(sitemap, /"\/products"/);
 });
 
 test("project intake selections persist through the protected inquiry API", () => {

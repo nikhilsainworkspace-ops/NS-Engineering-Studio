@@ -8,10 +8,10 @@ import { useEffect, useState } from "react";
 import type { SiteSettings } from "@/lib/brand";
 
 const links = [
+  { label: "Products", href: "/products" },
   { label: "Capabilities", href: "/services" },
-  { label: "Approach", href: "/process" },
-  { label: "Studio", href: "/about" },
-  { label: "FAQs", href: "/faq" }
+  { label: "How it works", href: "/process" },
+  { label: "About", href: "/about" }
 ];
 
 export function SiteHeader({ settings, whatsappUrl }: { settings: SiteSettings; whatsappUrl: string }) {

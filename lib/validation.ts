@@ -18,7 +18,7 @@ export const contactSchema = z.object({
   email: z.email().max(254).transform((value) => value.trim().toLowerCase()),
   phone: optionalText(32),
   subject: safeText(120),
-  projectType: z.enum(["Web engineering", "Product strategy & discovery", "Product design & design systems", "Integrations & automation", "Technical architecture", "Ongoing improvement", "Not sure yet"]).default("Not sure yet"),
+  projectType: z.enum(["Civil engineering learning & tools", "Architecture & BIM resources", "BOQ & quantity surveying", "Construction project costs", "Careers & professional growth", "Website or product support", "General enquiry", "Not sure yet"]).default("Not sure yet"),
   timeline: z.enum(["Exploring options", "Within 1 month", "1–3 months", "3+ months", "Time-sensitive", "Not decided yet"]).default("Not decided yet"),
   message: safeText(3000),
   consent: z.literal(true, { error: "Please confirm that we may use these details to respond." }),

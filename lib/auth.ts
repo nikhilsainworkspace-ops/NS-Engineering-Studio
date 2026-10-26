@@ -2,14 +2,14 @@ import "server-only";
 import { createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { cookies } from "next/headers";
 import { getCollection } from "@/lib/db";
-import { getEnv, adminIsConfigured } from "@/lib/env";
+import { getAdminEnv, adminIsConfigured } from "@/lib/env";
 
 const COOKIE_NAME = "ns_admin_session";
 const SESSION_TTL_MS = 8 * 60 * 60 * 1000;
 type SessionDoc = { _id: string; tokenHash: string; email: string; createdAt: Date; expiresAt: Date };
 
 function tokenHash(token: string): string {
-  const secret = process.env.AUTH_SECRET;
+  const secret = getAdminEnv().AUTH_SECRET;
   if (!secret || secret.length < 32) throw new Error("Authentication is not configured.");
   return createHmac("sha256", secret).update(token).digest("hex");
 }
@@ -23,7 +23,7 @@ export function safeCompare(left: string, right: string): boolean {
 
 export async function verifyAdminPassword(email: string, password: string): Promise<boolean> {
   if (!adminIsConfigured()) return false;
-  const env = getEnv();
+  const env = getAdminEnv();
   if (!safeCompare(email.trim().toLowerCase(), env.ADMIN_EMAIL.trim().toLowerCase())) return false;
   try {
     const argon2 = await import("argon2");

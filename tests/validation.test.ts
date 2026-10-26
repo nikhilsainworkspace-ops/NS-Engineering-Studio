@@ -7,7 +7,7 @@ const validContact = {
   email: "JAMIE@EXAMPLE.COM",
   phone: "7703977002",
   subject: "Question about services",
-  projectType: "Web engineering",
+  projectType: "Civil engineering learning & tools",
   timeline: "1–3 months",
   message: "I would like to understand the scope of the service.",
   consent: true,
@@ -21,7 +21,7 @@ describe("contact validation", () => {
     expect(result.success).toBe(true);
     if (result.success) {
       expect(result.data.email).toBe("jamie@example.com");
-      expect(result.data.projectType).toBe("Web engineering");
+      expect(result.data.projectType).toBe("Civil engineering learning & tools");
       expect(result.data.timeline).toBe("1–3 months");
     }
   });

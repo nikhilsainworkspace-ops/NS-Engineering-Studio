@@ -32,6 +32,9 @@ export async function getContent<T extends ServiceItem | FaqItem>(kind: ContentK
   }
   for (const item of bySlug.values()) {
     if (item.deleted) continue;
+    // Retire obsolete, unedited starter items after the product-led content refresh.
+    // Admin-edited records are kept because their isStarter flag is set to false.
+    if (item.isStarter === true) continue;
     const result = { ...item, isStarter: false } as unknown as T;
     if (!publishedOnly || result.published) output.push(result);
   }

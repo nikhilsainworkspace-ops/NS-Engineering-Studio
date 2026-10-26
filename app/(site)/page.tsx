@@ -1,132 +1,152 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  ArrowRight,
-  ArrowUpRight,
-  Blocks,
-  Check,
-  CircleCheck,
-  Code2,
-  Compass,
-  Gauge,
-  Layers3,
-  LockKeyhole,
-  MessageCircle,
-  MoveUpRight,
-  Network,
-  PanelsTopLeft,
-  ShieldCheck,
-  Sparkles,
-  Workflow,
+  ArrowRight, ArrowUpRight, BookOpen, Building2, Calculator, CheckCircle2,
+  Compass, GraduationCap, HardHat, Ruler, ShieldCheck, TrendingUp,
+  Users
 } from "lucide-react";
-import { ServiceCard } from "@/components/ServiceCard";
 import { getContent } from "@/lib/content";
 import { getSiteSettings } from "@/lib/settings";
-import type { FaqItem, ServiceItem } from "@/lib/brand";
+import { PRODUCT_URLS, type FaqItem, type ServiceItem } from "@/lib/brand";
 
 export const dynamic = "force-dynamic";
-const operatingPrinciples = [
-  { icon: Compass, title: "Start with context", text: "Understand the people, constraints and goal before jumping to a solution." },
-  { icon: Layers3, title: "Design the whole system", text: "Connect the interface, data, integrations and operational reality." },
-  { icon: ShieldCheck, title: "Engineer responsibly", text: "Keep accessibility, privacy, security and maintainability in the conversation." },
+export const metadata: Metadata = {
+  title: "Civil Engineering, Architecture & Construction Products",
+  description: "Discover Civil At Hand for learning, practical tools and career growth, and CivilMargin for civil construction project cost and margin visibility.",
+  alternates: { canonical: "/" }
+};
+
+const ecosystemPrinciples = [
+  { icon: Compass, title: "Clear next steps", text: "Know where to start, what each product is for and where to go next." },
+  { icon: ShieldCheck, title: "Practical, not hype", text: "Useful learning and reviewable project insights without unsupported promises." },
+  { icon: Users, title: "Made for real work", text: "Support for learners, site teams, designers, quantity surveyors and contractors." }
 ];
 
-const qualityAreas = [
-  { icon: PanelsTopLeft, title: "Useful by design", text: "Clear structure, responsive layouts and interactions that help people finish the task." },
-  { icon: Code2, title: "Built to evolve", text: "A considered foundation that makes future changes easier to reason about." },
-  { icon: LockKeyhole, title: "Security considered early", text: "Thoughtful data handling, access control and sensible defaults from the start." },
-  { icon: Gauge, title: "Performance in the details", text: "Attention to loading, layout stability and the experience on smaller devices." },
+const audiences = [
+  { icon: GraduationCap, title: "Students & graduates", text: "Learn concepts, build practical understanding and explore career paths." },
+  { icon: HardHat, title: "Site & QA/QC teams", text: "Find practical knowledge and resources connected to work on site." },
+  { icon: Ruler, title: "Architecture & BIM", text: "Explore resources across design, documentation and the built environment." },
+  { icon: Calculator, title: "Contractors & QS teams", text: "Review quantities, bills, materials, costs and possible margin movement." }
+];
+
+const products = [
+  {
+    name: "CivilMargin",
+    descriptor: "Project cost & margin visibility",
+    summary: "Bring BOQs, measurement books, bills, supplier quotes, material issues, variations and cash flow into one reviewable picture.",
+    audience: "For civil contractors and subcontractors",
+    url: PRODUCT_URLS.civilMargin,
+    action: "Explore CivilMargin",
+    icon: TrendingUp,
+    className: "product-card-margin",
+    features: ["Budget vs committed vs actual cost", "Supplier and material variance checks", "Findings with calculations for human review"]
+  },
+  {
+    name: "Civil At Hand",
+    descriptor: "Learn · Practise · Grow",
+    summary: "A practical home for the civil engineering and architecture community, bringing learning resources, tools, mentorship and career information together.",
+    audience: "For learners and built-environment professionals",
+    url: PRODUCT_URLS.civilAtHand,
+    action: "Explore Civil At Hand",
+    icon: BookOpen,
+    className: "product-card-learning",
+    features: ["Courses and study resources", "Practical examples and engineering tools", "Career guidance and professional growth"]
+  }
 ];
 
 export default async function HomePage() {
   const [settings, services, faqs] = await Promise.all([
     getSiteSettings(),
     getContent<ServiceItem>("services"),
-    getContent<FaqItem>("faqs"),
+    getContent<FaqItem>("faqs")
   ]);
   const [firstLine, ...restLines] = settings.heroHeadline.split("\n");
   const secondLine = restLines.join(" ");
 
   return <>
-    <section className="hero hero-premium">
+    <section className="hero hero-premium ecosystem-hero">
       <div className="hero-grid shell">
         <div className="hero-copy">
           <span className="eyebrow">{settings.heroEyebrow}</span>
           <h1>{firstLine}{secondLine ? <><br /><em>{secondLine}</em></> : null}</h1>
           <p className="hero-description">{settings.heroDescription}</p>
           <div className="hero-actions">
-            <Link className="button button-primary" href="/contact">Discuss your project <ArrowUpRight size={17} aria-hidden="true" /></Link>
-            <Link className="button button-outline" href="/services">Explore capabilities <ArrowRight size={16} aria-hidden="true" /></Link>
+            <Link className="button button-primary" href="/products">Explore our products <ArrowUpRight size={17} aria-hidden="true" /></Link>
+            <Link className="button button-outline" href="/contact">Ask about your needs <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>
-          <div className="hero-meta" aria-label="How we approach the work">
-            <span><CircleCheck size={15} aria-hidden="true" /> Clear scope</span>
-            <span><ShieldCheck size={15} aria-hidden="true" /> Responsible delivery</span>
-            <span><MessageCircle size={15} aria-hidden="true" /> Direct conversations</span>
+          <div className="hero-meta" aria-label="Our focus">
+            <span><CheckCircle2 size={15} aria-hidden="true" /> Learning & practical tools</span>
+            <span><CheckCircle2 size={15} aria-hidden="true" /> Project cost visibility</span>
+            <span><CheckCircle2 size={15} aria-hidden="true" /> Built-world focus</span>
           </div>
         </div>
-
-        <div className="hero-art" aria-label="Illustration of a digital product moving from discovery to design to engineering">
-          <div className="hero-art-ring" aria-hidden="true" />
-          <div className="hero-console">
-            <div className="console-topbar">
-              <div className="console-brand"><Image src={settings.logoPath} alt="" width={44} height={44} priority /><span><strong>NS / ENGINEERING</strong><small>PRODUCT SYSTEMS</small></span></div>
-              <span className="console-live"><i /> IN PRINCIPLE</span>
-            </div>
-            <div className="console-title-row"><div><span className="console-eyebrow">A PRACTICAL FRAMEWORK</span><h2>From first question<br />to useful product.</h2></div><span className="console-index">01—03</span></div>
-            <div className="architecture-flow">
-              <div className="architecture-node node-discover"><span className="node-symbol"><Compass size={18} /></span><span><strong>Discover</strong><small>Context & priorities</small></span><Check size={15} /></div>
-              <div className="flow-connector"><span /></div>
-              <div className="architecture-node node-design"><span className="node-symbol"><Blocks size={18} /></span><span><strong>Design</strong><small>Journeys & systems</small></span><Check size={15} /></div>
-              <div className="flow-connector"><span /></div>
-              <div className="architecture-node node-engineer"><span className="node-symbol"><Code2 size={18} /></span><span><strong>Engineer</strong><small>Build & learn</small></span><ArrowUpRight size={15} /></div>
-            </div>
-            <div className="console-foot"><span><span className="console-foot-dot" /> A good plan stays adaptable</span><span>NS / 001</span></div>
-          </div>
-          <div className="hero-float-note"><span className="float-note-icon"><Workflow size={17} /></span><span><strong>One connected process</strong><small>Product · Design · Engineering</small></span></div>
+        <div className="ecosystem-visual" aria-label="Two connected products for civil engineering, architecture and construction">
+          <div className="ecosystem-visual-grid" aria-hidden="true" />
+          <div className="ecosystem-visual-heading"><span className="ecosystem-symbol"><Building2 size={19} /></span><span><strong>THE BUILT-WORLD TOOLKIT</strong><small>ONE HOME · TWO PRODUCTS</small></span></div>
+          {products.map((product, index) => {
+            const Icon = product.icon;
+            return <a key={product.name} className={`ecosystem-mini-product ${product.className}`} href={product.url} target="_blank" rel="noopener noreferrer">
+              <span className="ecosystem-mini-index">0{index + 1}</span><span className="ecosystem-mini-icon"><Icon size={22} aria-hidden="true" /></span>
+              <span className="ecosystem-mini-copy"><strong>{product.name}</strong><small>{product.descriptor}</small></span><ArrowUpRight className="ecosystem-mini-arrow" size={17} aria-hidden="true" />
+            </a>;
+          })}
+          <div className="ecosystem-visual-foot"><span><span className="ecosystem-status-dot" /> Practical tools for real-world work</span><span>NS / BUILT ENVIRONMENT</span></div>
         </div>
       </div>
     </section>
 
-    <div className="trust-strip"><div className="shell trust-strip-inner"><span><Compass size={15} aria-hidden="true" /> Start with the real problem</span><span><Network size={15} aria-hidden="true" /> Connect the moving parts</span><span><Sparkles size={15} aria-hidden="true" /> Sweat the details that matter</span></div></div>
-
-    <section className="section capability-section" id="capabilities">
+    <section className="ecosystem-products section" id="products">
       <div className="shell">
         <div className="section-heading">
-          <div><span className="eyebrow">CAPABILITIES</span><h2>Make the complex<br /><span>feel considered.</span></h2></div>
-          <p>Bring us a defined brief or an early-stage question. Start with the need, then shape the right mix of strategy, design and engineering around it.</p>
+          <div><span className="eyebrow">OUR PRODUCTS</span><h2>Two clear paths.<br /><span>One built-world focus.</span></h2></div>
+          <p>Pick the product that fits the work in front of you. Each has its own purpose, features and official website.</p>
         </div>
-        {services.length ? <div className="service-grid">{services.slice(0, 6).map((service) => <ServiceCard key={service.slug} service={service} />)}</div> : <div className="empty-state">No published capabilities yet. <Link className="text-link" href="/contact">Start a conversation <ArrowRight size={15} /></Link></div>}
-        <div className="section-actions"><Link className="text-link" href="/services">Explore all capabilities <ArrowRight size={16} aria-hidden="true" /></Link></div>
+        <div className="ecosystem-product-grid">
+          {products.map((product, index) => {
+            const Icon = product.icon;
+            return <article key={product.name} className={`ecosystem-product-card ${product.className}`}>
+              <div className="ecosystem-product-top"><span className="ecosystem-product-icon"><Icon size={25} aria-hidden="true" /></span><span className="ecosystem-product-number">PRODUCT 0{index + 1}</span></div>
+              <p className="ecosystem-product-audience">{product.audience}</p>
+              <h3>{product.name}</h3>
+              <h4>{product.descriptor}</h4>
+              <p className="ecosystem-product-summary">{product.summary}</p>
+              <ul>{product.features.map((feature) => <li key={feature}><CheckCircle2 size={16} aria-hidden="true" />{feature}</li>)}</ul>
+              <a className="button button-primary ecosystem-product-action" href={product.url} target="_blank" rel="noopener noreferrer">{product.action} <ArrowUpRight size={17} aria-hidden="true" /></a>
+              <span className="ecosystem-external-note">Opens the official product website</span>
+            </article>;
+          })}
+        </div>
+        <p className="ecosystem-honesty-note">Features can change over time. See each official product site for current availability, plans and terms.</p>
       </div>
     </section>
 
-    <section className="section section-soft principles-section">
+    <section className="section section-soft ecosystem-audience-section">
       <div className="shell">
-        <div className="section-heading"><div><span className="eyebrow">THE WAY WE THINK</span><h2>Good engineering is<br /><span>more than code.</span></h2></div><p>The best solution is not always the biggest one. It is the one that fits the people, the problem and the environment it needs to live in.</p></div>
-        <div className="principle-cards">{operatingPrinciples.map(({ icon: Icon, title, text }, index) => <article className="principle-card" key={title}><div className="principle-card-top"><span className="principle-card-icon"><Icon size={21} aria-hidden="true" /></span><span className="principle-card-number">0{index + 1}</span></div><h3>{title}</h3><p>{text}</p></article>)}</div>
-        <div className="principle-cta"><p>Not sure what the right solution looks like yet? That is a useful place to start.</p><Link className="text-link" href="/process">Explore our approach <ArrowRight size={16} aria-hidden="true" /></Link></div>
+        <div className="section-heading"><div><span className="eyebrow">WHO IT IS FOR</span><h2>Useful at different<br /><span>stages of the journey.</span></h2></div><p>From the first civil engineering course to managing construction cost records, the right resource depends on your role and current question.</p></div>
+        <div className="ecosystem-audience-grid">{audiences.map(({ icon: Icon, title, text }, index) => <article className="ecosystem-audience-card" key={title}><span className="ecosystem-audience-count">0{index + 1}</span><span className="ecosystem-audience-icon"><Icon size={22} aria-hidden="true" /></span><h3>{title}</h3><p>{text}</p></article>)}</div>
       </div>
     </section>
 
-    <section className="section quality-section">
-      <div className="shell quality-layout">
-        <div className="quality-intro"><span className="eyebrow">BUILT AROUND QUALITY</span><h2>Make the right things<br /><em>part of the plan.</em></h2><p>Quality is not a final coat of paint. It comes from the choices made throughout discovery, design, implementation and release.</p><Link className="button button-outline" href="/process">See the process <ArrowRight size={16} aria-hidden="true" /></Link></div>
-        <div className="quality-grid">{qualityAreas.map(({ icon: Icon, title, text }) => <article className="quality-item" key={title}><span><Icon size={19} aria-hidden="true" /></span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div>
+    <section className="section ecosystem-why-section">
+      <div className="shell ecosystem-why-layout">
+        <div className="ecosystem-why-intro"><span className="eyebrow">WHY THIS ECOSYSTEM</span><h2>Make complex work<br /><em>easier to navigate.</em></h2><p>Engineering has technical depth. The digital tools around it should help people understand a topic, review the information and make the next step clearer.</p><Link className="text-link" href="/about">Learn about the studio <ArrowRight size={16} aria-hidden="true" /></Link></div>
+        <div className="ecosystem-principles">{ecosystemPrinciples.map(({ icon: Icon, title, text }, index) => <article className="ecosystem-principle" key={title}><span className="ecosystem-principle-number">0{index + 1}</span><span className="ecosystem-principle-icon"><Icon size={21} aria-hidden="true" /></span><div><h3>{title}</h3><p>{text}</p></div></article>)}</div>
       </div>
     </section>
 
-    <section className="section process-preview">
+    <section className="section section-soft capability-section" id="capabilities">
       <div className="shell">
-        <div className="section-heading"><div><span className="eyebrow">A CLEARER PATH</span><h2>Small, deliberate steps.<br /><span>Shared understanding.</span></h2></div><p>Strong delivery starts with an honest view of the work. Here is the framework; individual projects may adapt it to suit their context.</p></div>
-        <div className="process-grid"><article className="process-step"><span className="process-index">PHASE 01</span><h3>Understand</h3><p>Align on the problem, users, constraints and what success should mean.</p></article><article className="process-step"><span className="process-index">PHASE 02</span><h3>Shape</h3><p>Make priorities, scope, assumptions and open questions visible.</p></article><article className="process-step"><span className="process-index">PHASE 03</span><h3>Build</h3><p>Deliver in considered increments, review decisions and surface risks early.</p></article><article className="process-step"><span className="process-index">PHASE 04</span><h3>Improve</h3><p>Review what is ready, document what matters and plan the next useful step.</p></article></div>
-        <div className="section-actions"><Link className="button button-outline" href="/process">See how we work <ArrowRight size={16} aria-hidden="true" /></Link></div>
+        <div className="section-heading"><div><span className="eyebrow">EXPLORE BY NEED</span><h2>Start with what<br /><span>you are working on.</span></h2></div><p>Browse the core areas supported across our two products. Visit the official product sites for detailed features and current availability.</p></div>
+        {services.length ? <div className="service-grid">{services.slice(0, 6).map((service) => <article className="service-card ecosystem-service-card" key={service.slug}><div className="service-card-top"><span className="service-card-index">{String(service.sortOrder).padStart(2, "0")}</span></div><h3>{service.title}</h3><p>{service.summary}</p><Link className="text-link" href={`/services/${service.slug}`}>Understand this area <ArrowRight size={15} aria-hidden="true" /></Link></article>)}</div> : <div className="empty-state">Capabilities are being updated. <Link className="text-link" href="/products">Explore the products <ArrowRight size={15} /></Link></div>}
+        <div className="section-actions"><Link className="text-link" href="/services">View all focus areas <ArrowRight size={16} aria-hidden="true" /></Link></div>
       </div>
     </section>
 
-    <section className="section section-soft faq-section">
-      <div className="shell faq-preview"><div className="faq-intro"><span className="eyebrow">GOOD TO KNOW</span><h2 className="faq-preview-title">A few questions,<br /><em>made clearer.</em></h2><p>Understand the first conversation, how scope is shaped and what to consider before work begins.</p><Link className="text-link" href="/faq">Visit all FAQs <ArrowRight size={16} aria-hidden="true" /></Link></div><div className="accordion-list">{faqs.slice(0, 4).map((faq) => <details className="accordion-item" key={faq.slug}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}{faqs.length === 0 ? <p className="empty-state">FAQs will appear here when published.</p> : null}</div></div>
+    <section className="section faq-section">
+      <div className="shell faq-preview"><div className="faq-intro"><span className="eyebrow">GOOD TO KNOW</span><h2 className="faq-preview-title">A few questions,<br /><em>made clearer.</em></h2><p>Compare the products and understand where their roles differ.</p><Link className="text-link" href="/faq">Visit all FAQs <ArrowRight size={16} aria-hidden="true" /></Link></div><div className="accordion-list">{faqs.slice(0, 4).map((faq) => <details className="accordion-item" key={faq.slug}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}{faqs.length === 0 ? <p className="empty-state">FAQs will appear here when published.</p> : null}</div></div>
     </section>
 
-    <section className="final-cta-section"><div className="shell final-cta-panel"><div className="final-cta-mark"><Image src={settings.logoPath} alt="" width={72} height={72} /></div><div className="final-cta-copy"><span className="eyebrow">THE NEXT STEP STARTS HERE</span><h2>Bring the question.<br /><em>Build the right thing.</em></h2><p>You do not need a perfect brief. Share the outcome you are aiming for and the questions you are working through.</p></div><div className="final-cta-actions"><Link className="button button-primary" href="/contact">Tell us about your project <MoveUpRight size={17} aria-hidden="true" /></Link><Link className="final-cta-phone" href="/contact">Or view contact options <ArrowRight size={15} aria-hidden="true" /></Link></div></div></section>
+    <section className="final-cta-section"><div className="shell final-cta-panel ecosystem-final-cta"><div className="final-cta-mark"><Image src={settings.logoPath} alt="" width={72} height={72} /></div><div className="final-cta-copy"><span className="eyebrow">NOT SURE WHERE TO BEGIN?</span><h2>Find the right<br /><em>next step.</em></h2><p>Tell us what you are trying to do and we will direct your question to the most relevant product or contact pathway.</p></div><div className="final-cta-actions"><Link className="button button-primary" href="/products">Compare the products <ArrowRight size={17} aria-hidden="true" /></Link><Link className="final-cta-phone" href="/contact">Contact the team <ArrowUpRight size={15} aria-hidden="true" /></Link></div></div></section>
   </>;
 }

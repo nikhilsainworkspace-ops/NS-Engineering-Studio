@@ -1,18 +1,22 @@
+export const PRODUCT_URLS = {
+  civilMargin: "https://civilmarzin.civilathand.in/",
+  civilAtHand: "https://civilathand.in/"
+} as const;
+
 export const BRAND = {
   workingName: "NS Engineering Studio",
   shortName: "NS",
-  tagline: "Digital experiences. Engineered with intent.",
-  description: "Product thinking, considered design and dependable engineering for digital experiences built around real needs.",
+  tagline: "Practical tools for the built world.",
+  description: "A connected home for civil engineering, architecture and construction — from learning and practical tools to clearer project-cost decisions.",
   phone: "7703977002",
   logoPath: "/brand/ns-logo-original.png",
   defaultSiteUrl: "http://localhost:3000",
   nav: [
     { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
+    { label: "Products", href: "/products" },
     { label: "Capabilities", href: "/services" },
-    { label: "Approach", href: "/process" },
-    { label: "Studio", href: "/about" },
-    { label: "FAQs", href: "/faq" }
+    { label: "How it works", href: "/process" },
+    { label: "About", href: "/about" }
   ] as const
 } as const;
 
@@ -39,11 +43,11 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   brandName: BRAND.workingName,
   tagline: BRAND.tagline,
   description: BRAND.description,
-  heroEyebrow: "Strategy · Design · Engineering",
-  heroHeadline: "Digital experiences,\nengineered to move.",
-  heroDescription: "From first principles to final details, bring product thinking, considered design and dependable engineering together to make your next digital move clearer.",
-  aboutHeadline: "Complex work, made clearer. Digital products, built with intent.",
-  aboutBody: "NS Engineering Studio connects product thinking, design and engineering to help teams plan, build and improve digital experiences. The work begins with understanding the real problem, the people affected and the practical constraints around it. Scope, priorities and next steps are made clear before delivery begins.",
+  heroEyebrow: "Civil engineering · Architecture · Construction",
+  heroHeadline: "Build your knowledge.\nSee the whole project.",
+  heroDescription: "Two practical products for the built world: Civil At Hand helps people learn, practise and grow; CivilMargin helps civil contractors understand project costs and margin with more clarity.",
+  aboutHeadline: "Useful tools for the people who shape the built world.",
+  aboutBody: "NS Engineering Studio brings together practical digital products for civil engineering, architecture and construction. Civil At Hand is designed to support learning, tools and career growth across the built-environment community. CivilMargin focuses on cost and margin visibility for civil contractors and subcontractors. Each product has a distinct role, with clear explanations and practical next steps.",
   phone: BRAND.phone,
   email: "",
   logoPath: BRAND.logoPath,
@@ -74,20 +78,20 @@ export type FaqItem = {
   isStarter?: boolean;
 };
 
-// Replace these illustrative offerings before launch. They contain no customer evidence or performance claims.
+// Starter content explains the ecosystem honestly; product features and subscription plans live on their own official sites.
 export const STARTER_SERVICES: ServiceItem[] = [
-  { slug: "strategy-and-planning", title: "Product strategy & discovery", summary: "Turn a broad opportunity into a focused, testable plan.", body: "Clarify the users, problem, business context and constraints before committing to a build. Discovery work may include stakeholder conversations, journey mapping, requirements, prioritisation and a delivery roadmap. The exact deliverables and scope are agreed in the project brief.", icon: "Compass", published: true, sortOrder: 1, isStarter: true },
-  { slug: "digital-presence", title: "Web engineering", summary: "Build responsive, accessible digital experiences for real people.", body: "Plan and implement modern websites and web applications with attention to responsive layouts, accessibility, performance, maintainability and search fundamentals. Confirm the required integrations, content, hosting and release requirements for each engagement before work begins.", icon: "PanelsTopLeft", published: true, sortOrder: 2, isStarter: true },
-  { slug: "product-design-systems", title: "Product design & design systems", summary: "Make complex journeys feel clear and consistent.", body: "Shape information architecture, core user journeys, interaction patterns and reusable interface foundations. Deliverables can include user flows, interface concepts, component specifications and implementation guidance, based on the needs and constraints of the project.", icon: "Layers", published: true, sortOrder: 3, isStarter: true },
-  { slug: "integrations-automation", title: "Integrations & automation", summary: "Connect tools and reduce repetitive operational work.", body: "Map recurring tasks and system boundaries, then assess practical ways to connect services, automate handoffs and reduce manual duplication. Security, access permissions, reliability, error handling and human review are considered as part of the proposed solution.", icon: "Route", published: true, sortOrder: 4, isStarter: true },
-  { slug: "technical-architecture", title: "Technical architecture", summary: "Make informed choices before complexity becomes expensive.", body: "Review application structure, data flows, APIs, deployment needs and operational constraints. Architecture guidance should fit the current stage of the product and the team's capacity; avoid unnecessary complexity and document trade-offs clearly.", icon: "Lightbulb", published: true, sortOrder: 5, isStarter: true },
-  { slug: "project-support", title: "Ongoing improvement", summary: "Keep the experience useful as needs change.", body: "Prioritise incremental improvements, address defects, refine key journeys and plan maintenance in manageable steps. Support arrangements, service levels, response times and availability must be explicitly agreed for each engagement rather than assumed.", icon: "CircleHelp", published: true, sortOrder: 6, isStarter: true }
+  { slug: "civil-engineering-learning", title: "Civil engineering learning & practice", summary: "Build understanding with structured learning and practical resources.", body: "Civil At Hand is designed for people across the civil engineering and architecture journey, from students and fresh graduates to working professionals. Explore learning resources, practical examples, tools, mentorship and career information on the product website. Availability of individual resources can change over time.", icon: "Compass", published: true, sortOrder: 1, isStarter: true },
+  { slug: "architecture-and-bim", title: "Architecture & BIM knowledge", summary: "Explore resources for design, documentation and the built environment.", body: "Civil At Hand brings civil engineering and architecture learning together in one place, including resources for design and BIM professionals. Visit the live product for current materials and features. This website is an overview and does not replace project-specific professional advice.", icon: "Layers", published: true, sortOrder: 2, isStarter: true },
+  { slug: "quantity-surveying-and-boq", title: "BOQ & quantity-surveying workflows", summary: "Bring quantities, measurements and cost information into clearer view.", body: "CivilMargin is built around comparing BOQs, measurement records, bills, supplier quotes, material issues, variations and cash flow. The product shows checks with supporting calculations for human review. Findings are review prompts, not automatic accusations or accounting advice.", icon: "PanelsTopLeft", published: true, sortOrder: 3, isStarter: true },
+  { slug: "project-cost-visibility", title: "Project cost & margin visibility", summary: "Review budget, committed cost, actual cost and potential margin movement.", body: "CivilMargin supports civil contractors and subcontractors by comparing project records and surfacing items that may need attention. Its current capabilities, trial and plans are described on its official product website. It works alongside existing processes and does not replace accounting or project-management systems.", icon: "Route", published: true, sortOrder: 4, isStarter: true },
+  { slug: "construction-site-workflows", title: "Construction knowledge & site workflows", summary: "Connect practical knowledge with real construction work.", body: "Civil At Hand is the learning and professional-development destination for the broader built-environment community. Explore courses, study resources, practical tools, career information and other materials that are currently available on its official site.", icon: "Lightbulb", published: true, sortOrder: 5, isStarter: true },
+  { slug: "careers-and-professional-growth", title: "Careers & professional growth", summary: "Find resources for the next stage of your civil or architecture career.", body: "Civil At Hand is intended to support students, graduates, site professionals, QA/QC teams, quantity surveyors, design and BIM professionals, and people exploring their next career step. Current jobs, mentorship and learning options are maintained on the product website.", icon: "CircleHelp", published: true, sortOrder: 6, isStarter: true }
 ];
 
 export const STARTER_FAQS: FaqItem[] = [
-  { slug: "getting-started", question: "What should I bring to the first conversation?", answer: "A short description of the goal, who the work is for, what exists today and any important constraints is enough to begin. A complete brief is helpful but not required. Please do not send passwords, payment details or other sensitive information through the public form.", published: true, sortOrder: 1, isStarter: true },
-  { slug: "scope-and-timing", question: "Can you help shape an idea before it is fully defined?", answer: "The discovery and planning conversation can help clarify the problem, explore options and identify open questions. The right next step depends on the project's needs and the services available; the scope is confirmed directly before any work is agreed.", published: true, sortOrder: 2, isStarter: true },
-  { slug: "what-to-include", question: "How are scope, timing and estimates decided?", answer: "They depend on requirements, dependencies, access to decision-makers and the quality of existing materials. After an initial discussion, the next step is to clarify the deliverables, assumptions and uncertainties before committing to a schedule or estimate.", published: true, sortOrder: 3, isStarter: true },
-  { slug: "existing-platform", question: "Can you work with an existing website or platform?", answer: "Potentially. An initial review can establish the current architecture, ownership, technical constraints and priorities. Access and implementation work should only begin after responsibilities and permissions have been confirmed.", published: true, sortOrder: 4, isStarter: true },
-  { slug: "security-access", question: "How should I share credentials or private data?", answer: "Do not include credentials, private customer data, payment information or production secrets in the contact form or ordinary email. Access should be arranged through an appropriate secure channel after the scope and responsibilities are agreed.", published: true, sortOrder: 5, isStarter: true }
+  { slug: "which-product", question: "Which product should I use?", answer: "Choose Civil At Hand if you are looking for civil engineering or architecture learning, practical tools, mentorship or career resources. Choose CivilMargin if you work with civil construction project records and want to review BOQs, bills, materials, costs and margin. The Products page links directly to both official sites.", published: true, sortOrder: 1, isStarter: true },
+  { slug: "civil-at-hand-audience", question: "Who is Civil At Hand for?", answer: "Civil At Hand is intended for civil engineering and architecture students, graduates, site and QA/QC professionals, design and BIM professionals, quantity surveyors, construction professionals and people exploring a career in the built environment.", published: true, sortOrder: 2, isStarter: true },
+  { slug: "civilmargin-purpose", question: "What does CivilMargin help review?", answer: "CivilMargin compares project records such as BOQs, measurement books, bills, supplier quotes, material issues, variations and cash flow, and surfaces items for a person to review. A finding is a prompt to check the records; it is not a conclusion of error or misconduct.", published: true, sortOrder: 3, isStarter: true },
+  { slug: "existing-tools", question: "Do the products replace my current tools?", answer: "CivilMargin is described as working alongside existing accounting and spreadsheet workflows rather than replacing them. Civil At Hand is a learning and professional-resource platform. Check each product's official site for current integrations, supported file formats and feature availability.", published: true, sortOrder: 4, isStarter: true },
+  { slug: "professional-advice", question: "Can I rely on these products as project approval or professional certification?", answer: "No. Educational resources and product findings are designed to support understanding and review, not to replace project-specific engineering judgement, contract checks, accounting advice, statutory approvals or professional certification. Have qualified people review project decisions before acting on them.", published: true, sortOrder: 5, isStarter: true }
 ];
