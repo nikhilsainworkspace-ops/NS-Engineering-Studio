@@ -19,6 +19,8 @@ test("public, admin, API, docs, and core configuration files exist", () => {
   for (const file of [
     "app/layout.tsx", "app/(site)/page.tsx", "app/(site)/about/page.tsx", "app/(site)/services/page.tsx",
     "app/(site)/services/[slug]/page.tsx", "app/(site)/contact/page.tsx", "app/(site)/faq/page.tsx", "app/(site)/process/page.tsx", "app/(site)/products/page.tsx",
+    "app/(site)/products/[slug]/page.tsx", "app/(site)/industries/page.tsx", "app/(site)/tools/page.tsx", "app/(site)/resources/page.tsx", "app/(site)/resources/[slug]/page.tsx",
+    "components/EngineeringTools.tsx", "components/ResourceExplorer.tsx", "lib/resources.ts", "lib/product-content.ts",
     "app/(site)/privacy/page.tsx", "app/(site)/terms/page.tsx", "app/admin/page.tsx", "app/admin/login/page.tsx",
     "app/api/contact/route.ts", "app/api/auth/login/route.ts", "app/api/auth/logout/route.ts",
     "app/api/admin/overview/route.ts", "app/api/admin/leads/route.ts", "app/api/admin/settings/route.ts",
@@ -95,4 +97,51 @@ test("favicon assets have the expected raster dimensions", () => {
   assert.deepEqual(pngSize("public/apple-touch-icon.png"), [180, 180]);
   assert.deepEqual(pngSize("public/android-chrome-192x192.png"), [192, 192]);
   assert.deepEqual(pngSize("public/android-chrome-512x512.png"), [512, 512]);
+});
+
+
+test("engineering calculators have live formulas and working user actions", () => {
+  const toolsPage = read("app/(site)/tools/page.tsx");
+  const tools = read("components/EngineeringTools.tsx");
+  assert.match(toolsPage, /<EngineeringTools\s*\/>/);
+  assert.match(tools, /concrete\.length \* concrete\.width \* concrete\.depth/);
+  assert.match(tools, /surface\.walls \* surface\.length \* surface\.height/);
+  assert.match(tools, /margin\.revenue - planned/);
+  assert.match(tools, /rebar\.diameter \* rebar\.diameter \/ 162/);
+  assert.match(tools, /active === "rebar"/);
+  assert.match(tools, /window\.print\(\)/);
+  assert.match(tools, /navigator\.clipboard\.writeText/);
+  assert.match(tools, /resetCurrent/);
+  assert.match(tools, /aria-selected=\{active === key\}/);
+});
+
+test("guide library is searchable, filtered, internally linked and in the sitemap", () => {
+  const library = read("components/ResourceExplorer.tsx");
+  const data = read("lib/resources.ts");
+  const sitemap = read("app/sitemap.ts");
+  const detail = read("app/(site)/resources/[slug]/page.tsx");
+  assert.match(library, /setQuery/);
+  assert.match(library, /setCategory/);
+  assert.match(library, /filtered\.map/);
+  assert.match(data, /start-with-a-clear-boq/);
+  assert.match(data, /bim-coordination-basics/);
+  assert.match(detail, /generateStaticParams/);
+  assert.match(sitemap, /GUIDE_ARTICLES/);
+  assert.match(sitemap, /PRODUCT_GUIDES/);
+});
+
+test("product and role pathways link to supplied official product URLs", () => {
+  const productContent = read("lib/product-content.ts");
+  const brand = read("lib/brand.ts");
+  const industries = read("app/(site)/industries/page.tsx");
+  const header = read("components/SiteHeader.tsx");
+  assert.match(brand, /civilmarzin\.civilathand\.in/);
+  assert.match(brand, /civilathand\.in/);
+  assert.match(productContent, /PRODUCT_URLS\.civilMargin/);
+  assert.match(productContent, /PRODUCT_URLS\.civilAtHand/);
+  assert.match(industries, /Quantity surveyors & estimators/);
+  assert.match(industries, /Architecture & BIM professionals/);
+  assert.match(header, /href: "\/industries"/);
+  assert.match(header, /href: "\/tools"/);
+  assert.match(header, /href: "\/resources"/);
 });

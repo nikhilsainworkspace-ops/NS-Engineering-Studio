@@ -4,11 +4,12 @@ import Image from "next/image";
 import {
   ArrowRight, ArrowUpRight, BookOpen, Building2, Calculator, CheckCircle2,
   Compass, GraduationCap, HardHat, Ruler, ShieldCheck, TrendingUp,
-  Users
+  Users, BookOpenCheck, Clock3, Calculator as CalculatorIcon
 } from "lucide-react";
 import { getContent } from "@/lib/content";
 import { getSiteSettings } from "@/lib/settings";
 import { PRODUCT_URLS, type FaqItem, type ServiceItem } from "@/lib/brand";
+import { GUIDE_ARTICLES } from "@/lib/resources";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
@@ -33,6 +34,8 @@ const audiences = [
 const products = [
   {
     name: "CivilMargin",
+    slug: "civilmargin",
+    detailHref: "/products/civilmargin",
     descriptor: "Project cost & margin visibility",
     summary: "Bring BOQs, measurement books, bills, supplier quotes, material issues, variations and cash flow into one reviewable picture.",
     audience: "For civil contractors and subcontractors",
@@ -44,6 +47,8 @@ const products = [
   },
   {
     name: "Civil At Hand",
+    slug: "civil-at-hand",
+    detailHref: "/products/civil-at-hand",
     descriptor: "Learn · Practise · Grow",
     summary: "A practical home for the civil engineering and architecture community, bringing learning resources, tools, mentorship and career information together.",
     audience: "For learners and built-environment professionals",
@@ -112,8 +117,8 @@ export default async function HomePage() {
               <h4>{product.descriptor}</h4>
               <p className="ecosystem-product-summary">{product.summary}</p>
               <ul>{product.features.map((feature) => <li key={feature}><CheckCircle2 size={16} aria-hidden="true" />{feature}</li>)}</ul>
-              <a className="button button-primary ecosystem-product-action" href={product.url} target="_blank" rel="noopener noreferrer">{product.action} <ArrowUpRight size={17} aria-hidden="true" /></a>
-              <span className="ecosystem-external-note">Opens the official product website</span>
+              <div className="ecosystem-product-actions"><Link className="button button-outline ecosystem-product-detail-action" href={product.detailHref}>See how it fits <ArrowRight size={15} aria-hidden="true" /></Link><a className="button button-primary ecosystem-product-action" href={product.url} target="_blank" rel="noopener noreferrer">{product.action} <ArrowUpRight size={17} aria-hidden="true" /></a></div>
+              <span className="ecosystem-external-note">Official product links open in a new tab</span>
             </article>;
           })}
         </div>
@@ -143,10 +148,29 @@ export default async function HomePage() {
       </div>
     </section>
 
+    <section className="section section-soft practical-hub-section">
+      <div className="shell">
+        <div className="section-heading"><div><span className="eyebrow">TOOLS FOR THE NEXT STEP</span><h2>More than a landing page.<br /><span>A useful place to begin.</span></h2></div><p>Browse a guide, run a simple planning calculation, or find the pathway that matches your work. Each feature explains its purpose and limitations.</p></div>
+        <div className="practical-hub-grid">
+          <Link className="practical-hub-card hub-card-calculator" href="/tools"><span className="practical-hub-icon"><CalculatorIcon size={23} aria-hidden="true" /></span><span className="practical-hub-kicker">INTERACTIVE TOOLS</span><h3>Engineering calculators</h3><p>Explore concrete volume, paint coverage, reinforcement weight and project margin scenarios with visible formulas.</p><span className="text-link">Open the toolbench <ArrowRight size={15} /></span></Link>
+          <Link className="practical-hub-card hub-card-guides" href="/resources"><span className="practical-hub-icon"><BookOpenCheck size={23} aria-hidden="true" /></span><span className="practical-hub-kicker">KNOWLEDGE LIBRARY</span><h3>Guides & checklists</h3><p>Read practical explainers covering BOQ reviews, drawing revisions, BIM coordination and site quality.</p><span className="text-link">Explore the guides <ArrowRight size={15} /></span></Link>
+          <Link className="practical-hub-card hub-card-pathways" href="/industries"><span className="practical-hub-icon"><Compass size={23} aria-hidden="true" /></span><span className="practical-hub-kicker">CHOOSE YOUR PATH</span><h3>Find your workstream</h3><p>See how the products map to contractor, QS, architecture, BIM, site and early-career needs.</p><span className="text-link">Find your pathway <ArrowRight size={15} /></span></Link>
+        </div>
+      </div>
+    </section>
+
+    <section className="section featured-guides-section">
+      <div className="shell">
+        <div className="section-heading"><div><span className="eyebrow">FROM THE RESOURCE LIBRARY</span><h2>Useful ideas, clearly<br /><span>explained.</span></h2></div><p>Start with short, practical reading. These guides are educational references; project-specific work must follow approved documents and professional review.</p></div>
+        <div className="featured-guides-grid">{GUIDE_ARTICLES.slice(0, 3).map((guide, index) => <article className="featured-guide-card" key={guide.slug}><div className="featured-guide-top"><span>{guide.category}</span><span>0{index + 1}</span></div><h3><Link href={`/resources/${guide.slug}`}>{guide.title}</Link></h3><p>{guide.summary}</p><div className="featured-guide-bottom"><span><Clock3 size={14} aria-hidden="true" />{guide.readTime}</span><Link className="text-link" href={`/resources/${guide.slug}`}>Read guide <ArrowUpRight size={14} /></Link></div></article>)}</div>
+        <div className="section-actions"><Link className="text-link" href="/resources">Browse all {GUIDE_ARTICLES.length} guides <ArrowRight size={15} aria-hidden="true" /></Link></div>
+      </div>
+    </section>
+
     <section className="section faq-section">
       <div className="shell faq-preview"><div className="faq-intro"><span className="eyebrow">GOOD TO KNOW</span><h2 className="faq-preview-title">A few questions,<br /><em>made clearer.</em></h2><p>Compare the products and understand where their roles differ.</p><Link className="text-link" href="/faq">Visit all FAQs <ArrowRight size={16} aria-hidden="true" /></Link></div><div className="accordion-list">{faqs.slice(0, 4).map((faq) => <details className="accordion-item" key={faq.slug}><summary>{faq.question}</summary><p>{faq.answer}</p></details>)}{faqs.length === 0 ? <p className="empty-state">FAQs will appear here when published.</p> : null}</div></div>
     </section>
 
-    <section className="final-cta-section"><div className="shell final-cta-panel ecosystem-final-cta"><div className="final-cta-mark"><Image src={settings.logoPath} alt="" width={72} height={72} /></div><div className="final-cta-copy"><span className="eyebrow">NOT SURE WHERE TO BEGIN?</span><h2>Find the right<br /><em>next step.</em></h2><p>Tell us what you are trying to do and we will direct your question to the most relevant product or contact pathway.</p></div><div className="final-cta-actions"><Link className="button button-primary" href="/products">Compare the products <ArrowRight size={17} aria-hidden="true" /></Link><Link className="final-cta-phone" href="/contact">Contact the team <ArrowUpRight size={15} aria-hidden="true" /></Link></div></div></section>
+    <section className="final-cta-section"><div className="shell final-cta-panel ecosystem-final-cta"><div className="final-cta-mark"><Image src={settings.logoPath} alt="" width={72} height={72} /></div><div className="final-cta-copy"><span className="eyebrow">NOT SURE WHERE TO BEGIN?</span><h2>Find the right<br /><em>next step.</em></h2><p>Tell us what you are trying to do and we will direct your question to the most relevant product or contact pathway.</p></div><div className="final-cta-actions"><Link className="button button-primary" href="/products">Compare the products <ArrowRight size={17} aria-hidden="true" /></Link><Link className="final-cta-phone" href="/tools">Try an engineering tool <ArrowUpRight size={15} aria-hidden="true" /></Link><Link className="final-cta-phone" href="/contact">Contact the team <ArrowUpRight size={15} aria-hidden="true" /></Link></div></div></section>
   </>;
 }

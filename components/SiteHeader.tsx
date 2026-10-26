@@ -9,8 +9,10 @@ import type { SiteSettings } from "@/lib/brand";
 
 const links = [
   { label: "Products", href: "/products" },
-  { label: "Capabilities", href: "/services" },
-  { label: "How it works", href: "/process" },
+  { label: "Services", href: "/services" },
+  { label: "Who we serve", href: "/industries" },
+  { label: "Tools", href: "/tools" },
+  { label: "Guides", href: "/resources" },
   { label: "About", href: "/about" }
 ];
 

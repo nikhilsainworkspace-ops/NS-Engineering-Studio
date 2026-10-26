@@ -7,7 +7,9 @@ A responsive, premium product-ecosystem website built around the supplied black,
 ## What is included
 
 - Next.js App Router, React, strict TypeScript, Tailwind CSS 4 and Lucide icons.
-- Public home, product directory at `/products`, about, built-world focus areas and detail pages, contact, FAQ, privacy and terms pages; branded 404, loading and error states.
+- Public home, product directory at `/products`, dedicated `/products/civilmargin` and `/products/civil-at-hand` product explainers, about, built-world focus areas and detail pages, role-based `/industries`, contact, FAQ, privacy and terms pages; branded 404, loading and error states.
+- Interactive `/tools` workbench with concrete volume, paint/coating coverage, reinforcing-bar weight and simplified project-margin scenario calculators. Formulas and limits are shown; results can be copied or printed and are not persisted to the server.
+- Searchable and topic-filterable `/resources` library with seven full educational articles covering BOQ reviews, concrete volume, drawing revisions, site quality, project margin, BIM coordination and early-career development. Each guide has its own metadata, related links and clearly stated scope limitations.
 - Supplied logo in the header, footer and hero; original retained under `public/brand/`. PNG icons at 16×16, 32×32, 180×180, 192×192 and 512×512, ICO, SVG favicon, web manifest and 1200×630 social preview.
 - Responsive accessible navigation with direct product discovery, high-contrast CivilMargin/Civil At Hand cards, audience pathways, an interactive mobile menu, keyboard-operable native disclosure FAQs, reduced-motion support, visible focus states and a skip link.
 - Project inquiry form with server-side Zod validation, topic and timeline selectors, same-origin checks, honeypot, MongoDB-backed fixed-window rate limit, idempotency key, duplicate-submit protection, safe error states, private lead storage and optional Resend notification. Project area and timeline are available in the protected admin inbox.
@@ -16,9 +18,18 @@ A responsive, premium product-ecosystem website built around the supplied black,
 - Server-only environment validation, pooled MongoDB driver client, indexes, security headers, robots and sitemap.
 - Unit, source-integrity and Playwright end-to-end tests; password hash generator; optional idempotent starter-content seed script.
 
+## Expanded page architecture
+
+- `/products` compares the two products. `/products/civilmargin` explains contractor cost-control use cases; `/products/civil-at-hand` explains the learning and practical-resource pathway. Both have internal overview links and direct links to their official external sites.
+- `/industries` offers role-based routes for contractors/subcontractors, quantity surveyors/estimators, architecture/BIM, site/QA/QC, students/graduates, and owners/project leaders.
+- `/tools` contains four usable in-browser calculators. Concrete volume uses length × width × depth with a separately labelled planning allowance. Paint/coating quantity uses wall area less openings, coats, supplied coverage and an allowance. Reinforcement weight uses the theoretical d²/162 kg/m approximation with a planning allowance. The margin scenario subtracts estimated cost plus a contingency from revenue. Values are illustrative inputs, not engineering approvals or financial advice.
+- `/resources` supports client-side full-text search across guide titles/summaries/intro and topic filters. Every guide has a permanent route, unique page metadata, reading layout, takeaway summary, links to related guides, and a reminder to follow approved project documents and qualified review.
+- The sitemap includes all static pages plus product and guide detail routes. Content pages intentionally use locally authored starter education material; product availability and commercial terms link back to each official product site.
+
 ## Design and technical decisions
 
-- The supplied mark sets the core palette: graphite/black, warm gold, cream text and an ivory content surface for visual contrast. CSS custom properties are centralised in `app/globals.css`; the hero diagram is composed from local CSS and icon primitives, with no remote assets.
+- The supplied mark sets the core palette: graphite/black, warm gold, cream text, a restrained sage accent, and ivory calculator/reading surfaces for visual contrast. CSS custom properties are centralised in `app/globals.css`; the hero diagram is composed from local CSS and icon primitives, with no remote assets.
+- Public navigation now includes Products, Services, Who we serve, Tools, Guides and About. The footer has clear product, tools, guide and contact groups. Resource search and category filters, calculator tabs, reset actions, copy and print controls, and mobile navigation have real behavior.
 - No remote photos, third-party fonts, analytics, advertising pixels or cookie-consent UI are enabled by default. The product-led home page uses an original CSS-built visual, the supplied NS logo, and direct links to the official CivilMargin and Civil At Hand sites; it does not depend on hotlinked marketing imagery.
 - Server Components are used for public pages; client-side code is limited to menus and the form/admin interactions. Every admin API operation checks the session in the handler itself; hiding an admin control is not treated as authorization.
 - Contact leads, editable settings, content, sessions, rate limits and security audit events use MongoDB. MongoDB is not replaced by localStorage or in-memory storage. If Atlas is unavailable, public pages can fall back to the illustrative static content, but lead submission and admin writes fail truthfully rather than claiming success.
@@ -140,7 +151,7 @@ npm run test:e2e
 
 ## Post-deployment verification / security checklist
 
-- Open `/`, `/products`, `/about`, `/services`, a focus-area detail page, `/contact`, `/faq`, `/privacy`, `/terms`, `/robots.txt` and `/sitemap.xml` on mobile and desktop. Verify the external CivilMargin and Civil At Hand cards open their official sites in a separate tab.
+- Open `/`, `/products`, both `/products/...` detail pages, `/industries`, `/tools`, `/resources`, multiple `/resources/...` guide pages, `/about`, `/services`, a focus-area detail page, `/contact`, `/faq`, `/privacy`, `/terms`, `/robots.txt` and `/sitemap.xml` on mobile and desktop. Verify the external CivilMargin and Civil At Hand cards open their official sites in a separate tab.
 - Verify the phone is displayed exactly as `7703977002` unless intentionally changed in Admin; confirm the telephone link works. Verify WhatsApp is absent unless a complete international number has been configured.
 - Submit a valid contact inquiry, confirm the success reference appears only after a database write, verify the lead is private in Admin and test rate limiting/duplicate-submit handling. Test a disconnected/invalid database configuration and confirm the UI reports failure rather than success.
 - Open `/admin` in a private browser. It must redirect to `/admin/login`; protected APIs must return 401 without the session. Test wrong credentials, valid login, session cookie flags, logout/revocation and retry throttling.
