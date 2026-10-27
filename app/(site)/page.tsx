@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  ArrowRight, ArrowUpRight, BookOpen, Building2, Calculator, CheckCircle2,
+  ArrowRight, ArrowUpRight, BookOpen, Boxes, Building2, Calculator, CheckCircle2,
   Compass, GraduationCap, HardHat, Ruler, ShieldCheck, TrendingUp,
   Users, BookOpenCheck, Clock3, Calculator as CalculatorIcon
 } from "lucide-react";
@@ -13,22 +13,22 @@ import { GUIDE_ARTICLES } from "@/lib/resources";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Civil Engineering, Architecture & Construction Products",
-  description: "Discover Civil At Hand for learning, practical tools and career growth, and CivilMargin for civil construction project cost and margin visibility.",
+  title: "Civil Engineering, Architecture & Construction Services",
+  description: "Explore civil engineering consultancy, architectural planning, estimation, construction planning, manpower enquiries and integrated construction software from NS Engineering Studio.",
   alternates: { canonical: "/" }
 };
 
 const ecosystemPrinciples = [
-  { icon: Compass, title: "Clear next steps", text: "Know where to start, what each product is for and where to go next." },
-  { icon: ShieldCheck, title: "Practical, not hype", text: "Useful learning and reviewable project insights without unsupported promises." },
-  { icon: Users, title: "Made for real work", text: "Support for learners, site teams, designers, quantity surveyors and contractors." }
+  { icon: Compass, title: "Clear next steps", text: "Understand the service scope, tool purpose and next action before committing." },
+  { icon: ShieldCheck, title: "Scope-aware support", text: "Project needs, availability and technical approvals are confirmed instead of assumed." },
+  { icon: Users, title: "Made for project teams", text: "Service enquiries, quantity reviews and operating workflows for the built environment." }
 ];
 
 const audiences = [
-  { icon: GraduationCap, title: "Students & graduates", text: "Learn concepts, build practical understanding and explore career paths." },
-  { icon: HardHat, title: "Site & QA/QC teams", text: "Find practical knowledge and resources connected to work on site." },
-  { icon: Ruler, title: "Architecture & BIM", text: "Explore resources across design, documentation and the built environment." },
-  { icon: Calculator, title: "Contractors & QS teams", text: "Review quantities, bills, materials, costs and possible margin movement." }
+  { icon: GraduationCap, title: "Students & graduates", text: "Use the practical guides and browser-based tools to strengthen technical understanding." },
+  { icon: HardHat, title: "Site & QA/QC teams", text: "Keep tasks, site records, documents and operational follow-ups more organised." },
+  { icon: Ruler, title: "Architecture & BIM", text: "Enquire about planning, drafting, documentation, visualization and design coordination." },
+  { icon: Calculator, title: "Contractors & QS teams", text: "Connect quantity estimates, material workflows, supplier records and project costs." }
 ];
 
 const products = [
@@ -40,23 +40,25 @@ const products = [
     summary: "Bring BOQs, measurement books, bills, supplier quotes, material issues, variations and cash flow into one reviewable picture.",
     audience: "For civil contractors and subcontractors",
     url: PRODUCT_URLS.civilMargin,
-    action: "Explore CivilMargin",
+    launchVerified: false,
+    action: "View CivilMargin overview",
     icon: TrendingUp,
     className: "product-card-margin",
     features: ["Budget vs committed vs actual cost", "Supplier and material variance checks", "Findings with calculations for human review"]
   },
   {
-    name: "Civil At Hand",
-    slug: "civil-at-hand",
-    detailHref: "/products/civil-at-hand",
-    descriptor: "Learn · Practise · Grow",
-    summary: "A practical home for the civil engineering and architecture community, bringing learning resources, tools, mentorship and career information together.",
-    audience: "For learners and built-environment professionals",
+    name: "Engineering Workspace",
+    slug: "engineering-workspace",
+    detailHref: "/products/engineering-workspace",
+    descriptor: "Construction operations workspace",
+    summary: "An integrated operations workspace for contacts, projects, tasks, estimates, procurement, stock, workforce, finance, documents, tenders and reports.",
+    audience: "For contractors, site teams and construction administrators",
     url: PRODUCT_URLS.civilAtHand,
-    action: "Explore Civil At Hand",
-    icon: BookOpen,
+    launchVerified: true,
+    action: "Open Engineering Workspace",
+    icon: Boxes,
     className: "product-card-learning",
-    features: ["Courses and study resources", "Practical examples and engineering tools", "Career guidance and professional growth"]
+    features: ["Contacts, projects and follow-ups", "Estimates, materials, procurement and workforce", "Finance, invoices, documents and reports"]
   }
 ];
 
@@ -81,8 +83,8 @@ export default async function HomePage() {
             <Link className="button button-outline" href="/contact">Ask about your needs <ArrowRight size={16} aria-hidden="true" /></Link>
           </div>
           <div className="hero-meta" aria-label="Our focus">
-            <span><CheckCircle2 size={15} aria-hidden="true" /> Learning & practical tools</span>
-            <span><CheckCircle2 size={15} aria-hidden="true" /> Project cost visibility</span>
+            <span><CheckCircle2 size={15} aria-hidden="true" /> Engineering and architecture services</span>
+            <span><CheckCircle2 size={15} aria-hidden="true" /> Project and workforce workflows</span>
             <span><CheckCircle2 size={15} aria-hidden="true" /> Built-world focus</span>
           </div>
         </div>
@@ -91,10 +93,10 @@ export default async function HomePage() {
           <div className="ecosystem-visual-heading"><span className="ecosystem-symbol"><Building2 size={19} /></span><span><strong>THE BUILT-WORLD TOOLKIT</strong><small>ONE HOME · TWO PRODUCTS</small></span></div>
           {products.map((product, index) => {
             const Icon = product.icon;
-            return <a key={product.name} className={`ecosystem-mini-product ${product.className}`} href={product.url} target="_blank" rel="noopener noreferrer">
+            return product.launchVerified ? <a key={product.name} className={`ecosystem-mini-product ${product.className}`} href={product.url} target={product.url.startsWith("http") ? "_blank" : undefined} rel={product.url.startsWith("http") ? "noopener noreferrer" : undefined}>
               <span className="ecosystem-mini-index">0{index + 1}</span><span className="ecosystem-mini-icon"><Icon size={22} aria-hidden="true" /></span>
               <span className="ecosystem-mini-copy"><strong>{product.name}</strong><small>{product.descriptor}</small></span><ArrowUpRight className="ecosystem-mini-arrow" size={17} aria-hidden="true" />
-            </a>;
+            </a> : <Link key={product.name} className={`ecosystem-mini-product ${product.className}`} href={product.detailHref}><span className="ecosystem-mini-index">0{index + 1}</span><span className="ecosystem-mini-icon"><Icon size={22} aria-hidden="true" /></span><span className="ecosystem-mini-copy"><strong>{product.name}</strong><small>{product.descriptor} · view overview</small></span><ArrowRight className="ecosystem-mini-arrow" size={17} aria-hidden="true" /></Link>;
           })}
           <div className="ecosystem-visual-foot"><span><span className="ecosystem-status-dot" /> Practical tools for real-world work</span><span>NS / BUILT ENVIRONMENT</span></div>
         </div>
@@ -105,7 +107,7 @@ export default async function HomePage() {
       <div className="shell">
         <div className="section-heading">
           <div><span className="eyebrow">OUR PRODUCTS</span><h2>Two clear paths.<br /><span>One built-world focus.</span></h2></div>
-          <p>Pick the product that fits the work in front of you. Each has its own purpose, features and official website.</p>
+          <p>Choose the workflow that fits your project. The public site also describes service enquiries and a directory of engineering software.</p>
         </div>
         <div className="ecosystem-product-grid">
           {products.map((product, index) => {
@@ -117,18 +119,18 @@ export default async function HomePage() {
               <h4>{product.descriptor}</h4>
               <p className="ecosystem-product-summary">{product.summary}</p>
               <ul>{product.features.map((feature) => <li key={feature}><CheckCircle2 size={16} aria-hidden="true" />{feature}</li>)}</ul>
-              <div className="ecosystem-product-actions"><Link className="button button-outline ecosystem-product-detail-action" href={product.detailHref}>See how it fits <ArrowRight size={15} aria-hidden="true" /></Link><a className="button button-primary ecosystem-product-action" href={product.url} target="_blank" rel="noopener noreferrer">{product.action} <ArrowUpRight size={17} aria-hidden="true" /></a></div>
-              <span className="ecosystem-external-note">Official product links open in a new tab</span>
+              <div className="ecosystem-product-actions"><Link className="button button-outline ecosystem-product-detail-action" href={product.detailHref}>See how it fits <ArrowRight size={15} aria-hidden="true" /></Link>{product.launchVerified ? <a className="button button-primary ecosystem-product-action" href={product.url} target={product.url.startsWith("http") ? "_blank" : undefined} rel={product.url.startsWith("http") ? "noopener noreferrer" : undefined}>{product.action} <ArrowUpRight size={17} aria-hidden="true" /></a> : <Link className="button button-primary ecosystem-product-action" href={product.detailHref}>{product.action} <ArrowRight size={17} aria-hidden="true" /></Link>}</div>
+              <span className="ecosystem-external-note">{product.launchVerified ? "Open the configured product route" : "External destination needs verification; view the product overview for now"}</span>
             </article>;
           })}
         </div>
-        <p className="ecosystem-honesty-note">Features can change over time. See each official product site for current availability, plans and terms.</p>
+        <p className="ecosystem-honesty-note">Service availability, configured modules, plans and terms must be confirmed for the target deployment.</p>
       </div>
     </section>
 
     <section className="section section-soft ecosystem-audience-section">
       <div className="shell">
-        <div className="section-heading"><div><span className="eyebrow">WHO IT IS FOR</span><h2>Useful at different<br /><span>stages of the journey.</span></h2></div><p>From the first civil engineering course to managing construction cost records, the right resource depends on your role and current question.</p></div>
+        <div className="section-heading"><div><span className="eyebrow">WHO IT IS FOR</span><h2>Useful at different<br /><span>stages of the journey.</span></h2></div><p>From estimating and design coordination to site operations and project cost records, the relevant support depends on role, scope and location.</p></div>
         <div className="ecosystem-audience-grid">{audiences.map(({ icon: Icon, title, text }, index) => <article className="ecosystem-audience-card" key={title}><span className="ecosystem-audience-count">0{index + 1}</span><span className="ecosystem-audience-icon"><Icon size={22} aria-hidden="true" /></span><h3>{title}</h3><p>{text}</p></article>)}</div>
       </div>
     </section>
@@ -142,7 +144,7 @@ export default async function HomePage() {
 
     <section className="section section-soft capability-section" id="capabilities">
       <div className="shell">
-        <div className="section-heading"><div><span className="eyebrow">EXPLORE BY NEED</span><h2>Start with what<br /><span>you are working on.</span></h2></div><p>Browse the core areas supported across our two products. Visit the official product sites for detailed features and current availability.</p></div>
+        <div className="section-heading"><div><span className="eyebrow">EXPLORE BY NEED</span><h2>Start with what<br /><span>you are working on.</span></h2></div><p>Explore service enquiry categories managed by NS Engineering Studio. Deliverables and coverage depend on location, project scope, qualifications and applicable requirements.</p></div>
         {services.length ? <div className="service-grid">{services.slice(0, 6).map((service) => <article className="service-card ecosystem-service-card" key={service.slug}><div className="service-card-top"><span className="service-card-index">{String(service.sortOrder).padStart(2, "0")}</span></div><h3>{service.title}</h3><p>{service.summary}</p><Link className="text-link" href={`/services/${service.slug}`}>Understand this area <ArrowRight size={15} aria-hidden="true" /></Link></article>)}</div> : <div className="empty-state">Capabilities are being updated. <Link className="text-link" href="/products">Explore the products <ArrowRight size={15} /></Link></div>}
         <div className="section-actions"><Link className="text-link" href="/services">View all focus areas <ArrowRight size={16} aria-hidden="true" /></Link></div>
       </div>

@@ -5,7 +5,7 @@ import { getContent } from "@/lib/content";
 import type { FaqItem } from "@/lib/brand";
 
 export const dynamic = "force-dynamic";
-export const metadata: Metadata = { title: "FAQs", description: "Answers about Civil At Hand, CivilMargin and the NS Engineering Studio product ecosystem." };
+export const metadata: Metadata = { title: "FAQs", description: "Answers about Engineering Workspace, CivilMargin and the NS Engineering Studio product ecosystem." };
 
 export default async function FaqPage() {
   const faqs = await getContent<FaqItem>("faqs");
