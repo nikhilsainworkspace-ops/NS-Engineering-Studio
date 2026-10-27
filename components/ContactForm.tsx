@@ -5,7 +5,9 @@ import { ArrowRight, CheckCircle2, LoaderCircle } from "lucide-react";
 
 type Feedback = { kind: "success" | "error"; message: string } | null;
 
-export function ContactForm() {
+const interestOptions = ["Not sure yet", "Civil engineering consultancy", "Architectural planning & design", "Construction & project planning", "Estimation & BOQ", "Construction & civil manpower supply", "Engineering software", "Project enquiry", "Website support", "General enquiry"];
+
+export function ContactForm({ initialProjectType = "Not sure yet", initialSubject = "", initialProjectSlug = "" }: { initialProjectType?: string; initialSubject?: string; initialProjectSlug?: string }) {
   const [pending, setPending] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [submissionKey, setSubmissionKey] = useState("");
@@ -39,13 +41,16 @@ export function ContactForm() {
     }
   }
 
-  return <form className="contact-form" onSubmit={onSubmit} noValidate>
+  return <form className="contact-form" onSubmit={onSubmit}>
     <div className="form-grid">
       <div className="field"><label htmlFor="contact-name">Your name <span aria-hidden="true">*</span></label><input id="contact-name" name="name" autoComplete="name" minLength={1} maxLength={100} required placeholder="Name" /></div>
       <div className="field"><label htmlFor="contact-email">Email address <span aria-hidden="true">*</span></label><input id="contact-email" name="email" type="email" autoComplete="email" maxLength={254} required placeholder="you@example.com" /></div>
       <div className="field"><label htmlFor="contact-phone">Phone <span className="optional-label">Optional</span></label><input id="contact-phone" name="phone" type="tel" autoComplete="tel" maxLength={32} placeholder="Your preferred number" /></div>
-      <div className="field field-full"><label htmlFor="contact-subject">Project or question <span aria-hidden="true">*</span></label><input id="contact-subject" name="subject" maxLength={120} required placeholder="A few words about what you need" /></div>
-      <div className="field"><label htmlFor="contact-project-type">Area of interest</label><select id="contact-project-type" name="projectType" defaultValue="Not sure yet"><option>Not sure yet</option><option>Civil engineering learning &amp; tools</option><option>Architecture &amp; BIM resources</option><option>BOQ &amp; quantity surveying</option><option>Construction project costs</option><option>Careers &amp; professional growth</option><option>Website or product support</option><option>General enquiry</option></select></div>
+      <div className="field"><label htmlFor="contact-organization">Organization <span className="optional-label">Optional</span></label><input id="contact-organization" name="organization" autoComplete="organization" maxLength={160} placeholder="Company or organization" /></div>
+      <div className="field"><label htmlFor="contact-state">State / Union Territory <span className="optional-label">Optional</span></label><select id="contact-state" name="state" autoComplete="address-level1" defaultValue=""><option value="">Select a state or territory</option><option>Andhra Pradesh</option><option>Arunachal Pradesh</option><option>Assam</option><option>Bihar</option><option>Chhattisgarh</option><option>Goa</option><option>Gujarat</option><option>Haryana</option><option>Himachal Pradesh</option><option>Jharkhand</option><option>Karnataka</option><option>Kerala</option><option>Madhya Pradesh</option><option>Maharashtra</option><option>Manipur</option><option>Meghalaya</option><option>Mizoram</option><option>Nagaland</option><option>Odisha</option><option>Punjab</option><option>Rajasthan</option><option>Sikkim</option><option>Tamil Nadu</option><option>Telangana</option><option>Tripura</option><option>Uttar Pradesh</option><option>Uttarakhand</option><option>West Bengal</option><option>Andaman and Nicobar Islands</option><option>Chandigarh</option><option>Dadra and Nagar Haveli and Daman and Diu</option><option>Delhi</option><option>Jammu and Kashmir</option><option>Ladakh</option><option>Lakshadweep</option><option>Puducherry</option></select></div>
+      <div className="field"><label htmlFor="contact-city">City / District <span className="optional-label">Optional</span></label><input id="contact-city" name="city" autoComplete="address-level2" maxLength={100} placeholder="City or district" /></div>
+      <div className="field field-full"><label htmlFor="contact-subject">Project or question <span aria-hidden="true">*</span></label><input id="contact-subject" name="subject" maxLength={120} required defaultValue={initialSubject} placeholder="A few words about what you need" /></div>
+      <div className="field"><label htmlFor="contact-project-type">Area of interest</label><select id="contact-project-type" name="projectType" defaultValue={interestOptions.includes(initialProjectType) ? initialProjectType : "Not sure yet"}>{interestOptions.map((interest) => <option key={interest}>{interest}</option>)}</select></div>
       <div className="field"><label htmlFor="contact-timeline">Preferred timeline</label><select id="contact-timeline" name="timeline" defaultValue="Not decided yet"><option>Not decided yet</option><option>Exploring options</option><option>Within 1 month</option><option>1–3 months</option><option>3+ months</option><option>Time-sensitive</option></select></div>
       <div className="field field-full"><label htmlFor="contact-message">Tell us a little more <span aria-hidden="true">*</span></label><textarea id="contact-message" name="message" rows={5} maxLength={3000} required placeholder="What are you hoping to work on?" /><span className="field-help">Please don’t include passwords, payment details or other sensitive information.</span></div>
       <div className="honeypot" aria-hidden="true"><label htmlFor="contact-website">Leave this field empty</label><input id="contact-website" name="website" tabIndex={-1} autoComplete="off" /></div>

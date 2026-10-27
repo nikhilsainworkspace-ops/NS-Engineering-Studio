@@ -21,7 +21,7 @@ test("public, admin, API, docs, and core configuration files exist", () => {
     "app/(site)/services/[slug]/page.tsx", "app/(site)/contact/page.tsx", "app/(site)/faq/page.tsx", "app/(site)/process/page.tsx", "app/(site)/products/page.tsx",
     "app/(site)/products/[slug]/page.tsx", "app/(site)/industries/page.tsx", "app/(site)/tools/page.tsx", "app/(site)/resources/page.tsx", "app/(site)/resources/[slug]/page.tsx",
     "components/EngineeringTools.tsx", "components/ResourceExplorer.tsx", "lib/resources.ts", "lib/product-content.ts",
-    "app/(site)/privacy/page.tsx", "app/(site)/terms/page.tsx", "app/admin/page.tsx", "app/admin/login/page.tsx",
+    "app/(site)/privacy/page.tsx", "app/(site)/terms/page.tsx", "app/(site)/projects/page.tsx", "app/(site)/projects/[slug]/page.tsx", "app/(site)/engineering-software/page.tsx", "app/(site)/cookies/page.tsx", "app/(site)/refund-cancellation/page.tsx", "app/admin/projects/page.tsx", "app/admin/software/page.tsx", "app/admin/page.tsx", "app/admin/login/page.tsx",
     "app/api/contact/route.ts", "app/api/auth/login/route.ts", "app/api/auth/logout/route.ts",
     "app/api/admin/overview/route.ts", "app/api/admin/leads/route.ts", "app/api/admin/settings/route.ts",
     "lib/db.ts", "lib/auth.ts", "lib/validation.ts", "README.md", ".env.example", ".gitignore",
@@ -35,7 +35,7 @@ test("safe repository packaging excludes local environment and generated directo
   assert.equal(exists("node_modules"), false);
   assert.equal(exists(".next"), false);
   const env = read(".env.example");
-  assert.match(env, /ADMIN_PASSWORD_HASH=<argon2id-hash-generated-locally>/);
+  assert.match(env, /ADMIN_PASSWORD_HASH=/);
   assert.doesNotMatch(env, /re_[A-Za-z0-9]{20,}/);
 });
 
@@ -47,12 +47,15 @@ test("civil engineering product pages and navigation are connected", () => {
   const products = read("app/(site)/products/page.tsx");
   const brand = read("lib/brand.ts");
   assert.match(home, /CivilMargin/);
-  assert.match(home, /Civil At Hand/);
+  assert.match(home, /Engineering Workspace/);
+  assert.doesNotMatch(home, /Civil At Hand/);
   assert.match(brand, /https:\/\/civilmarzin\.civilathand\.in\//);
-  assert.match(brand, /https:\/\/civilathand\.in\//);
+  assert.doesNotMatch(brand, /https:\/\/civilathand\.in\//);
+  assert.match(brand, /civilAtHand: "\/workspace"/);
   assert.match(home, /capability-section/);
   assert.match(products, /name: "CivilMargin"/);
-  assert.match(products, /name: "Civil At Hand"/);
+  assert.match(products, /name: "Engineering Workspace"/);
+  assert.doesNotMatch(products, /name: "Civil At Hand"/);
   assert.match(products, /Visit \{product\.name\}/);
   assert.match(header, /href: "\/products"/);
   assert.match(sitemap, /"\/products"/);
@@ -139,6 +142,8 @@ test("product and role pathways link to supplied official product URLs", () => {
   assert.match(brand, /civilathand\.in/);
   assert.match(productContent, /PRODUCT_URLS\.civilMargin/);
   assert.match(productContent, /PRODUCT_URLS\.civilAtHand/);
+  assert.match(productContent, /slug: "engineering-workspace"/);
+  assert.match(read("next.config.ts"), /destination: "\/products\/engineering-workspace"/);
   assert.match(industries, /Quantity surveyors & estimators/);
   assert.match(industries, /Architecture & BIM professionals/);
   assert.match(header, /href: "\/industries"/);

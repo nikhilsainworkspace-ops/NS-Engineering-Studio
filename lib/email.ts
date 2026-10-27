@@ -1,7 +1,7 @@
 import "server-only";
 import { emailIsConfigured, getEnv } from "@/lib/env";
 
-export async function sendLeadNotification(lead: { id: string; name: string; email: string; phone: string; subject: string; projectType?: string; timeline?: string; message: string }): Promise<"sent" | "disabled" | "failed"> {
+export async function sendLeadNotification(lead: { id: string; name: string; email: string; phone: string; organization?: string; state?: string; city?: string; projectSlug?: string; subject: string; projectType?: string; timeline?: string; message: string }): Promise<"sent" | "disabled" | "failed"> {
   if (!emailIsConfigured()) return "disabled";
   const env = getEnv();
   const text = [
@@ -10,6 +10,9 @@ export async function sendLeadNotification(lead: { id: string; name: string; ema
     `Name: ${lead.name}`,
     `Email: ${lead.email}`,
     `Phone: ${lead.phone || "Not supplied"}`,
+    `Organization: ${lead.organization || "Not supplied"}`,
+    `Location: ${[lead.city, lead.state].filter(Boolean).join(", ") || "Not supplied"}`,
+    `Project reference: ${lead.projectSlug || "Not applicable"}`,
     `Subject: ${lead.subject}`,
     `Area of interest: ${lead.projectType || "Not sure yet"}`,
     `Preferred timeline: ${lead.timeline || "Not decided yet"}`,

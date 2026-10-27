@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { usePathname } from "next/navigation";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -10,6 +11,9 @@ import type { SiteSettings } from "@/lib/brand";
 const links = [
   { label: "Products", href: "/products" },
   { label: "Services", href: "/services" },
+  { label: "Search", href: "/search" },
+  { label: "Projects", href: "/projects" },
+  { label: "Engineering Software", href: "/engineering-software" },
   { label: "Who we serve", href: "/industries" },
   { label: "Tools", href: "/tools" },
   { label: "Guides", href: "/resources" },

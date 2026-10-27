@@ -1,5 +1,103 @@
 import type { NextConfig } from "next";
 
+const legacyApiRewrites = [
+  { source: '/api/assistant', destination: '/api/civil-at-hand/assistant' },
+  { source: '/api/attendance/bulk', destination: '/api/civil-at-hand/attendance/bulk' },
+  { source: '/api/attendance', destination: '/api/civil-at-hand/attendance' },
+  { source: '/api/auth/activity', destination: '/api/civil-at-hand/auth/activity' },
+  { source: '/api/backup/restore', destination: '/api/civil-at-hand/backup/restore' },
+  { source: '/api/backup', destination: '/api/civil-at-hand/backup' },
+  { source: '/api/backup/scheduled/:id/restore', destination: '/api/civil-at-hand/backup/scheduled/:id/restore' },
+  { source: '/api/backup/scheduled', destination: '/api/civil-at-hand/backup/scheduled' },
+  { source: '/api/contacts/:id/interactions', destination: '/api/civil-at-hand/contacts/:id/interactions' },
+  { source: '/api/contacts/:id', destination: '/api/civil-at-hand/contacts/:id' },
+  { source: '/api/contacts/bulk', destination: '/api/civil-at-hand/contacts/bulk' },
+  { source: '/api/contacts/merge', destination: '/api/civil-at-hand/contacts/merge' },
+  { source: '/api/contacts', destination: '/api/civil-at-hand/contacts' },
+  { source: '/api/custom-forms/:id/responses/export', destination: '/api/civil-at-hand/custom-forms/:id/responses/export' },
+  { source: '/api/custom-forms/:id/responses', destination: '/api/civil-at-hand/custom-forms/:id/responses' },
+  { source: '/api/custom-forms/:id', destination: '/api/civil-at-hand/custom-forms/:id' },
+  { source: '/api/custom-forms', destination: '/api/civil-at-hand/custom-forms' },
+  { source: '/api/custom-public/:token', destination: '/api/civil-at-hand/custom-public/:token' },
+  { source: '/api/documents/:id/files', destination: '/api/civil-at-hand/documents/:id/files' },
+  { source: '/api/documents/:id', destination: '/api/civil-at-hand/documents/:id' },
+  { source: '/api/documents/files/:fileId', destination: '/api/civil-at-hand/documents/files/:fileId' },
+  { source: '/api/documents', destination: '/api/civil-at-hand/documents' },
+  { source: '/api/estimates/:id/convert', destination: '/api/civil-at-hand/estimates/:id/convert' },
+  { source: '/api/estimates/:id/revise', destination: '/api/civil-at-hand/estimates/:id/revise' },
+  { source: '/api/estimates/:id', destination: '/api/civil-at-hand/estimates/:id' },
+  { source: '/api/estimates/:id/status', destination: '/api/civil-at-hand/estimates/:id/status' },
+  { source: '/api/estimates/import', destination: '/api/civil-at-hand/estimates/import' },
+  { source: '/api/estimates', destination: '/api/civil-at-hand/estimates' },
+  { source: '/api/expenses/:id', destination: '/api/civil-at-hand/expenses/:id' },
+  { source: '/api/expenses', destination: '/api/civil-at-hand/expenses' },
+  { source: '/api/export', destination: '/api/civil-at-hand/export' },
+  { source: '/api/finance/project-costs', destination: '/api/civil-at-hand/finance/project-costs' },
+  { source: '/api/health', destination: '/api/civil-at-hand/health' },
+  { source: '/api/import', destination: '/api/civil-at-hand/import' },
+  { source: '/api/invoices/:id/payments/:paymentId', destination: '/api/civil-at-hand/invoices/:id/payments/:paymentId' },
+  { source: '/api/invoices/:id/payments', destination: '/api/civil-at-hand/invoices/:id/payments' },
+  { source: '/api/invoices/:id', destination: '/api/civil-at-hand/invoices/:id' },
+  { source: '/api/invoices/:id/state', destination: '/api/civil-at-hand/invoices/:id/state' },
+  { source: '/api/invoices', destination: '/api/civil-at-hand/invoices' },
+  { source: '/api/links/:id', destination: '/api/civil-at-hand/links/:id' },
+  { source: '/api/links', destination: '/api/civil-at-hand/links' },
+  { source: '/api/material-requests/:id', destination: '/api/civil-at-hand/material-requests/:id' },
+  { source: '/api/material-requests', destination: '/api/civil-at-hand/material-requests' },
+  { source: '/api/materials/:id', destination: '/api/civil-at-hand/materials/:id' },
+  { source: '/api/materials', destination: '/api/civil-at-hand/materials' },
+  { source: '/api/notes/:id/assets', destination: '/api/civil-at-hand/notes/:id/assets' },
+  { source: '/api/notes/:id', destination: '/api/civil-at-hand/notes/:id' },
+  { source: '/api/notes/:id/share/:shareId', destination: '/api/civil-at-hand/notes/:id/share/:shareId' },
+  { source: '/api/notes/:id/share', destination: '/api/civil-at-hand/notes/:id/share' },
+  { source: '/api/notes/assets/:id', destination: '/api/civil-at-hand/notes/assets/:id' },
+  { source: '/api/notes', destination: '/api/civil-at-hand/notes' },
+  { source: '/api/overview', destination: '/api/civil-at-hand/overview' },
+  { source: '/api/projects/:id', destination: '/api/civil-at-hand/projects/:id' },
+  { source: '/api/projects/:id/summary', destination: '/api/civil-at-hand/projects/:id/summary' },
+  { source: '/api/projects', destination: '/api/civil-at-hand/projects' },
+  { source: '/api/public/:token', destination: '/api/civil-at-hand/public/:token' },
+  { source: '/api/public-pages/:id/publish', destination: '/api/civil-at-hand/public-pages/:id/publish' },
+  { source: '/api/public-pages/:id', destination: '/api/civil-at-hand/public-pages/:id' },
+  { source: '/api/public-pages/images/:id', destination: '/api/civil-at-hand/public-pages/images/:id' },
+  { source: '/api/public-pages/images', destination: '/api/civil-at-hand/public-pages/images' },
+  { source: '/api/public-pages', destination: '/api/civil-at-hand/public-pages' },
+  { source: '/api/purchase-orders/:id/receive', destination: '/api/civil-at-hand/purchase-orders/:id/receive' },
+  { source: '/api/purchase-orders/:id', destination: '/api/civil-at-hand/purchase-orders/:id' },
+  { source: '/api/purchase-orders/:id/status', destination: '/api/civil-at-hand/purchase-orders/:id/status' },
+  { source: '/api/purchase-orders', destination: '/api/civil-at-hand/purchase-orders' },
+  { source: '/api/rates/:id', destination: '/api/civil-at-hand/rates/:id' },
+  { source: '/api/rates', destination: '/api/civil-at-hand/rates' },
+  { source: '/api/reports/business', destination: '/api/civil-at-hand/reports/business' },
+  { source: '/api/rooms/:id', destination: '/api/civil-at-hand/rooms/:id' },
+  { source: '/api/rooms', destination: '/api/civil-at-hand/rooms' },
+  { source: '/api/search', destination: '/api/civil-at-hand/search' },
+  { source: '/api/security/2fa', destination: '/api/civil-at-hand/security/2fa' },
+  { source: '/api/security/audit', destination: '/api/civil-at-hand/security/audit' },
+  { source: '/api/security/preferences', destination: '/api/civil-at-hand/security/preferences' },
+  { source: '/api/security/sessions', destination: '/api/civil-at-hand/security/sessions' },
+  { source: '/api/settings', destination: '/api/civil-at-hand/settings' },
+  { source: '/api/shared/:token/assets/:assetId', destination: '/api/civil-at-hand/shared/:token/assets/:assetId' },
+  { source: '/api/shared/:token/download', destination: '/api/civil-at-hand/shared/:token/download' },
+  { source: '/api/shared/:token', destination: '/api/civil-at-hand/shared/:token' },
+  { source: '/api/site/images/:id', destination: '/api/civil-at-hand/site/images/:id' },
+  { source: '/api/site-reports/:id/review', destination: '/api/civil-at-hand/site-reports/:id/review' },
+  { source: '/api/site-reports/:id', destination: '/api/civil-at-hand/site-reports/:id' },
+  { source: '/api/site-reports', destination: '/api/civil-at-hand/site-reports' },
+  { source: '/api/stock/balances', destination: '/api/civil-at-hand/stock/balances' },
+  { source: '/api/stock/movements/:id/reverse', destination: '/api/civil-at-hand/stock/movements/:id/reverse' },
+  { source: '/api/stock/movements', destination: '/api/civil-at-hand/stock/movements' },
+  { source: '/api/tasks/:id', destination: '/api/civil-at-hand/tasks/:id' },
+  { source: '/api/tasks', destination: '/api/civil-at-hand/tasks' },
+  { source: '/api/tenders/:id/convert', destination: '/api/civil-at-hand/tenders/:id/convert' },
+  { source: '/api/tenders/:id', destination: '/api/civil-at-hand/tenders/:id' },
+  { source: '/api/tenders', destination: '/api/civil-at-hand/tenders' },
+  { source: '/api/worker-transactions/:id', destination: '/api/civil-at-hand/worker-transactions/:id' },
+  { source: '/api/worker-transactions', destination: '/api/civil-at-hand/worker-transactions' },
+  { source: '/api/workers/:id', destination: '/api/civil-at-hand/workers/:id' },
+  { source: '/api/workers', destination: '/api/civil-at-hand/workers' },
+];
+
 const scriptPolicy = process.env.NODE_ENV === "development" ? "script-src 'self' 'unsafe-inline' 'unsafe-eval';" : "script-src 'self' 'unsafe-inline';";
 const securityHeaders = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -7,7 +105,7 @@ const securityHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
   ...(process.env.NODE_ENV === "production" ? [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" }] : []),
-  { key: "Content-Security-Policy", value: `default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' data: blob:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; ${scriptPolicy} connect-src 'self';` }
+  { key: "Content-Security-Policy", value: `default-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'; img-src 'self' https: data: blob:; font-src 'self' data:; style-src 'self' 'unsafe-inline'; ${scriptPolicy} connect-src 'self';` }
 ];
 
 const nextConfig: NextConfig = {
@@ -16,6 +114,20 @@ const nextConfig: NextConfig = {
   productionBrowserSourceMaps: false,
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
+  },
+  async redirects() {
+    return [
+      { source: "/products/civil-at-hand", destination: "/products/engineering-workspace", permanent: true },
+      { source: "/forms/:token", destination: "/workspace/forms/:token", permanent: true },
+      { source: "/join/:token", destination: "/workspace/join/:token", permanent: true },
+      { source: "/shared/:token", destination: "/workspace/shared/:token", permanent: true },
+      { source: "/p/:slug", destination: "/workspace/p/:slug", permanent: true },
+      { source: "/print/:kind/:id", destination: "/workspace/print/:kind/:id", permanent: true }
+    ];
+  },
+  async rewrites() {
+    // Keep non-conflicting legacy API paths available while routing implementation to the namespaced handlers.
+    return { afterFiles: legacyApiRewrites };
   }
 };
 

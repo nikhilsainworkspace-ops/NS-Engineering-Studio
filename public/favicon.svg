@@ -1,6 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="12" fill="#08090a"/>
-  <path d="M12 48V16l24 22V16h8v32L20 26v22z" fill="#eeeae0"/>
-  <path d="M46 16h8v7H37l-4-5 4-2zM34 31h14c6 0 9 4 9 9s-3 8-9 8H35v-7h13c2 0 2-3 0-3H42c-5 0-8-2-8-6z" fill="#e4b35d"/>
-  <path d="M26 40h5v8h-5z" fill="#e4b35d"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-labelledby="title desc"><title id="title">NS Engineering Studio</title><desc id="desc">Geometric NS monogram built from engineering drafting lines.</desc><rect width="256" height="256" rx="36" fill="#0d1b2a"/><g fill="none" stroke="#6ea8fe" stroke-width="8" stroke-linecap="square" stroke-linejoin="miter"><path d="M40 184V72h18l66 86V72"/><path d="M216 75c-14-10-30-15-47-15-25 0-42 13-42 32 0 17 11 25 39 32 29 8 43 16 43 34 0 22-20 37-49 37-23 0-43-7-60-22"/><path d="M28 207H228" stroke="#dce8f8" stroke-width="3"/><path d="M40 48H76M180 48H216M40 40V56M216 40V56" stroke="#dce8f8" stroke-width="3"/></g></svg>

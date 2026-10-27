@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["modules/civil-at-hand/*"]
+    }
+  },
+  "include": ["modules/civil-at-hand/reference/tests/**/*.ts", "modules/civil-at-hand/lib/**/*.ts", "modules/civil-at-hand/models/**/*.ts"],
+  "exclude": ["node_modules", ".next"]
+}

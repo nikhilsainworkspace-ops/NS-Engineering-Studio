@@ -2,7 +2,7 @@
   "name": "ns-engineering-studio",
   "version": "1.0.0",
   "private": true,
-  "description": "Civil engineering product ecosystem for CivilMargin and Civil At Hand",
+  "description": "Integrated engineering services, construction workspace and software platform for NS Engineering Studio",
   "engines": {
     "node": "22.x"
   },
@@ -17,8 +17,11 @@
     "test:e2e": "playwright test",
     "admin:hash": "node scripts/hash-password.mjs",
     "seed": "node --experimental-strip-types scripts/seed.ts",
-    "test:source": "node --test tests/project.test.mjs",
-    "verify:source": "node scripts/verify-source.mjs"
+    "test:source": "node --test tests/*.test.mjs",
+    "verify:source": "node scripts/verify-source.mjs",
+    "test:civil-at-hand": "tsx --tsconfig tsconfig.civil-at-hand.tests.json --test modules/civil-at-hand/reference/tests/*.test.ts",
+    "test:civil-at-hand:integration": "TSX_TSCONFIG_PATH=tsconfig.civil-at-hand.tests.json node --experimental-test-module-mocks --import tsx --test modules/civil-at-hand/reference/tests/integration/*.test.ts",
+    "check:all": "npm run typecheck && npm run lint && npm test && npm run test:source && npm run test:civil-at-hand && npm run test:civil-at-hand:integration && npm run build"
   },
   "dependencies": {
     "argon2": "0.45.1",
@@ -27,7 +30,9 @@
     "next": "16.4.3",
     "react": "19.3.0",
     "react-dom": "19.3.0",
-    "zod": "4.6.5"
+    "zod": "4.6.5",
+    "exceljs": "4.4.0",
+    "mongoose": "8.19.1"
   },
   "devDependencies": {
     "@playwright/test": "1.56.1",
@@ -39,6 +44,7 @@
     "eslint-config-next": "16.4.3",
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3",
-    "vitest": "5.0.5"
+    "vitest": "5.0.5",
+    "tsx": "4.20.6"
   }
 }

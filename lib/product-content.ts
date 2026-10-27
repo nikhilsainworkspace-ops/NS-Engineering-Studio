@@ -1,12 +1,13 @@
 import { PRODUCT_URLS } from "@/lib/brand";
 
 export type ProductGuide = {
-  slug: "civilmargin" | "civil-at-hand";
+  slug: "civilmargin" | "engineering-workspace";
   name: string;
   eyebrow: string;
   headline: string;
   summary: string;
   officialUrl: string;
+  launchVerified: boolean;
   audience: string;
   role: string;
   benefits: { title: string; body: string }[];
@@ -23,6 +24,7 @@ export const PRODUCT_GUIDES: ProductGuide[] = [
     headline: "See the project numbers behind the decision.",
     summary: "CivilMargin is a construction finance-control workspace for civil contractors. It connects BOQs, measurements, supplier bills, variations, materials and cash-flow assumptions so teams can review cost gaps and potential margin movement with supporting records.",
     officialUrl: PRODUCT_URLS.civilMargin,
+    launchVerified: false,
     audience: "Civil contractors, subcontractors, owners, project managers, QS and accounts teams",
     role: "Project cost control and review",
     benefits: [
@@ -37,30 +39,31 @@ export const PRODUCT_GUIDES: ProductGuide[] = [
       { number: "03", title: "Decide and document", body: "Record the explanation, correction or approval according to your own contract and governance requirements." }
     ],
     goodFit: ["You manage one or more civil construction projects", "You need a clearer view of cost, commitments and potential margin changes", "Your team reviews BOQs, bills, measurements, materials or variations", "You want review prompts tied to records rather than unexplained totals"],
-    boundaries: "CivilMargin supports decision-making; it does not replace your accounting system, statutory books, qualified quantity-surveying review, contract interpretation, tax or legal advice. RA bill outputs are drafts for review. Confirm the current features, security notes, pricing and terms on the official website."
+    boundaries: "CivilMargin supports decision-making; it does not replace your accounting system, statutory books, qualified quantity-surveying review, contract interpretation, tax or legal advice. RA bill outputs are drafts for review. The external destination supplied with the source project was not verified in this build. Confirm the current launch URL, features, security notes, pricing and terms before relying on or promoting the product."
   },
   {
-    slug: "civil-at-hand",
-    name: "Civil At Hand",
-    eyebrow: "LEARNING & PRACTICAL RESOURCES",
-    headline: "Keep learning connected to real work.",
-    summary: "Civil At Hand is the companion destination for people exploring civil engineering, architecture and the wider built environment. Use the official site to find currently available learning materials, practical tools and professional-development resources.",
+    slug: "engineering-workspace",
+    name: "Engineering Workspace",
+    eyebrow: "CONSTRUCTION OPERATIONS WORKSPACE",
+    headline: "Keep construction workflows connected.",
+    summary: "The NS Engineering Studio workspace brings construction-business operations into one protected place, including contacts, projects, tasks, estimates, materials, procurement, workforce, finance, documents, tenders, reports and public forms.",
     officialUrl: PRODUCT_URLS.civilAtHand,
-    audience: "Students, graduates, site professionals, designers, BIM practitioners and people growing their careers",
-    role: "Learning, practice and professional growth",
+    launchVerified: true,
+    audience: "Civil contractors, project teams, estimators, operations and construction administrators",
+    role: "Construction operations and records",
     benefits: [
-      { title: "Build understanding step by step", body: "Use learning material to revisit concepts and connect technical principles with the questions that appear during study and practice." },
-      { title: "Explore practical topics", body: "Find relevant content across civil engineering, construction and architecture as resources become available on the live platform." },
-      { title: "Support professional development", body: "Use structured learning and career-oriented information to identify areas for further study and supervised practice." },
-      { title: "Keep real-world context in view", body: "Pair educational content with approved drawings, codes, specifications, supervision and feedback from qualified professionals." }
+      { title: "Keep records organised", body: "Manage business contacts, project information and follow-ups in one workspace." },
+      { title: "Track operational workflows", body: "Use tasks, estimates, rates, procurement, workforce and finance features already present in the integrated application." },
+      { title: "Create useful reports", body: "Use reporting and export tools to review current records and prepare follow-up actions." },
+      { title: "Keep controls in place", body: "Protected admin APIs, session checks and configured database access are required for private workflows." }
     ],
     workflows: [
-      { number: "01", title: "Choose the topic", body: "Start with a concept, task, study goal or area of professional development you want to understand better." },
-      { number: "02", title: "Learn and practise", body: "Review the materials that are currently available and work through the examples within their stated scope." },
-      { number: "03", title: "Apply with review", body: "Use new knowledge as a foundation for supervised practice. A learning resource is not project approval or professional certification." }
+      { number: "01", title: "Choose the topic", body: "Start with the contact, construction project, estimate or operational workflow that needs a structured record." },
+      { number: "02", title: "Work through the record", body: "Use contacts, projects, estimates, tasks and other modules your account is authorised to access." },
+      { number: "03", title: "Review and follow up", body: "Use reports and exports as operational aids, and verify important outputs before contractual, accounting or construction decisions." }
     ],
-    goodFit: ["You are studying civil engineering or architecture", "You want to refresh a technical concept", "You work on site, in QA/QC, design or BIM", "You are building a structured professional-development plan"],
-    boundaries: "The live Civil At Hand website is the source of truth for current availability. Learning resources support understanding and do not replace professional qualification, local regulations, project-specific instructions or competent supervision."
+    goodFit: ["You coordinate construction projects and site teams", "You need a clearer estimate, procurement or workforce workflow", "You manage operational records or follow-ups", "You need structured reports and exports"],
+    boundaries: "This workspace does not replace accounting, statutory records, qualified engineering review, local regulations or contract requirements. Database, email and other provider-backed features must be configured before use."
   }
 ];
 

@@ -21,6 +21,8 @@ export async function getSiteSettings(): Promise<SiteSettings> {
     if (!stored) return { ...fallback };
     const { _id: _ignored, updatedAt: _alsoIgnored, ...values } = stored;
     const merged = { ...fallback, ...values };
+  if (typeof merged.socialInstagram === "string" && /instagram\.com\/(?:…|\.\.\.)?\/?$/i.test(merged.socialInstagram.trim())) merged.socialInstagram = "";
+  if (typeof merged.socialLinkedIn === "string" && /linkedin\.com\/(?:…|\.\.\.)?\/?$/i.test(merged.socialLinkedIn.trim())) merged.socialLinkedIn = "";
     // Migrate only the untouched defaults from the previous starter brand. Explicit owner copy stays intact.
     if (values.brandName === "NS Studio") merged.brandName = fallback.brandName;
     if (["Thoughtful work. Clear next steps.", "Digital experiences. Engineered with intent."].includes(String(values.tagline))) merged.tagline = fallback.tagline;
