@@ -8,7 +8,7 @@ import { isSameOrigin, jsonError } from "@/lib/http";
 import { sendLeadNotification } from "@/lib/email";
 import { writeAudit } from "@/lib/audit";
 
-type LeadDoc = { _id: string; requestKey?: string; name: string; email: string; phone: string; subject: string; projectType?: string; timeline?: string; message: string; status: "new" | "in_progress" | "resolved"; notes: string; createdAt: Date; updatedAt: Date };
+type LeadDoc = { _id: string; requestKey?: string; name: string; email: string; phone: string; subject: string; organization?: string; state?: string; city?: string; projectType?: string; timeline?: string; message: string; status: "new" | "contacted" | "in_progress" | "converted" | "closed" | "resolved"; priority?: "low" | "normal" | "high" | "urgent"; assignedTo?: string; followUpDate?: string; notes: string; createdAt: Date; updatedAt: Date };
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -48,11 +48,18 @@ export async function POST(request: NextRequest) {
       name: parsed.data.name,
       email: parsed.data.email,
       phone: parsed.data.phone,
+      organization: parsed.data.organization,
+      state: parsed.data.state,
+      city: parsed.data.city,
+      projectSlug: parsed.data.projectSlug,
       subject: parsed.data.subject,
       projectType: parsed.data.projectType,
       timeline: parsed.data.timeline,
       message: parsed.data.message,
       status: "new",
+      priority: "normal",
+      assignedTo: "",
+      followUpDate: "",
       notes: "",
       createdAt: now,
       updatedAt: now
@@ -66,7 +73,7 @@ export async function POST(request: NextRequest) {
       }
       throw error;
     }
-    const notification = await sendLeadNotification({ id: leadId, name: lead.name, email: lead.email, phone: lead.phone, subject: lead.subject, projectType: lead.projectType ?? "Not sure yet", timeline: lead.timeline ?? "Not decided yet", message: lead.message });
+    const notification = await sendLeadNotification({ id: leadId, name: lead.name, email: lead.email, phone: lead.phone, subject: lead.subject, projectType: lead.projectType ?? "Not sure yet", timeline: lead.timeline ?? "Not decided yet", organization: lead.organization ?? "", state: lead.state ?? "", city: lead.city ?? "", projectSlug: lead.projectSlug ?? "", message: lead.message });
     await writeAudit("lead.created", leadId, "system");
     if (notification === "failed") console.error("A saved inquiry could not trigger the optional email notification.");
     return Response.json({ message: "Your inquiry has been received by the website. The site administrator can now review it.", reference: leadId }, { status: 201, headers: { "Cache-Control": "no-store" } });
