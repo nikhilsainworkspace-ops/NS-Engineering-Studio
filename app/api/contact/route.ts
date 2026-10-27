@@ -8,7 +8,7 @@ import { isSameOrigin, jsonError } from "@/lib/http";
 import { sendLeadNotification } from "@/lib/email";
 import { writeAudit } from "@/lib/audit";
 
-type LeadDoc = { _id: string; requestKey?: string; name: string; email: string; phone: string; subject: string; organization?: string; state?: string; city?: string; projectType?: string; timeline?: string; message: string; status: "new" | "contacted" | "in_progress" | "converted" | "closed" | "resolved"; priority?: "low" | "normal" | "high" | "urgent"; assignedTo?: string; followUpDate?: string; notes: string; createdAt: Date; updatedAt: Date };
+type LeadDoc = { _id: string; requestKey?: string; name: string; email: string; phone: string; subject: string; organization?: string; state?: string; city?: string; projectSlug?: string; projectType?: string; timeline?: string; message: string; status: "new" | "contacted" | "in_progress" | "converted" | "closed" | "resolved"; priority?: "low" | "normal" | "high" | "urgent"; assignedTo?: string; followUpDate?: string; notes: string; createdAt: Date; updatedAt: Date };
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
