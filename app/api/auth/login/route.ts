@@ -11,6 +11,7 @@ export const dynamic = "force-dynamic";
 
 export async function POST(request: NextRequest) {
   if (!isSameOrigin(request)) return jsonError("Sign-in could not be completed.", 403);
+  if (process.env.ADMIN_TOTP_SECRET?.trim()) return jsonError("Two-step verification is enabled. Sign in through the Engineering Workspace so the authenticator code can be checked.", 403);
   if (!adminIsConfigured()) return jsonError("Admin sign-in is not configured. No default account is available.", 503);
   const length = Number(request.headers.get("content-length") ?? 0);
   if (length > 5000) return jsonError("Sign-in could not be completed.", 400);

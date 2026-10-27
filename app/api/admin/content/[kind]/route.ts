@@ -3,12 +3,12 @@ import { getCollection, getDb } from "@/lib/db";
 import { getAdminSession } from "@/lib/auth";
 import { privateJson, jsonError } from "@/lib/http";
 import { getContent, type ContentKind } from "@/lib/content";
-import { serviceSchema, faqSchema } from "@/lib/validation";
+import { serviceSchema, faqSchema, projectSchema, softwareSchema } from "@/lib/validation";
 import { writeAudit } from "@/lib/audit";
 
 type ContentDoc = Record<string, unknown> & { _id: string; type: ContentKind; slug: string; deleted?: boolean; published?: boolean; createdAt?: Date; updatedAt?: Date };
 type Params = { params: Promise<{ kind: string }> };
-const validKind = (value: string): value is ContentKind => value === "services" || value === "faqs";
+const validKind = (value: string): value is ContentKind => value === "services" || value === "faqs" || value === "projects" || value === "software";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -33,7 +33,8 @@ export async function POST(request: NextRequest, context: Params) {
   if (!validKind(kind)) return jsonError("Unknown content type.", 404);
   let raw: unknown;
   try { raw = await request.json(); } catch { return jsonError("Invalid request.", 400); }
-  const parsed = kind === "services" ? serviceSchema.safeParse(raw) : faqSchema.safeParse(raw);
+  const schema = kind === "services" ? serviceSchema : kind === "faqs" ? faqSchema : kind === "projects" ? projectSchema : softwareSchema;
+  const parsed = schema.safeParse(raw);
   if (!parsed.success) return Response.json({ error: "Please review the content fields.", fields: parsed.error.flatten().fieldErrors }, { status: 422, headers: { "Cache-Control": "no-store" } });
   try {
     await getDb();

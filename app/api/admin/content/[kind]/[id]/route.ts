@@ -4,12 +4,12 @@ import { getAdminSession } from "@/lib/auth";
 import { privateJson, jsonError } from "@/lib/http";
 import { type ContentKind } from "@/lib/content";
 import { STARTER_FAQS, STARTER_SERVICES } from "@/lib/brand";
-import { serviceSchema, faqSchema } from "@/lib/validation";
+import { serviceSchema, faqSchema, projectSchema, softwareSchema } from "@/lib/validation";
 import { writeAudit } from "@/lib/audit";
 
 type ContentDoc = Record<string, unknown> & { _id: string; type: ContentKind; slug: string; deleted?: boolean; published?: boolean; createdAt?: Date; updatedAt?: Date };
 type Params = { params: Promise<{ kind: string; id: string }> };
-const validKind = (value: string): value is ContentKind => value === "services" || value === "faqs";
+const validKind = (value: string): value is ContentKind => value === "services" || value === "faqs" || value === "projects" || value === "software";
 const validId = (value: string) => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value) && value.length <= 80;
 
 export const runtime = "nodejs";
@@ -23,7 +23,8 @@ export async function PATCH(request: NextRequest, context: Params) {
   if (!validKind(kind) || !validId(id)) return jsonError("Invalid content reference.", 400);
   let raw: unknown;
   try { raw = await request.json(); } catch { return jsonError("Invalid request.", 400); }
-  const parsed = kind === "services" ? serviceSchema.safeParse(raw) : faqSchema.safeParse(raw);
+  const schema = kind === "services" ? serviceSchema : kind === "faqs" ? faqSchema : kind === "projects" ? projectSchema : softwareSchema;
+  const parsed = schema.safeParse(raw);
   if (!parsed.success || parsed.data.slug !== id) return jsonError("Please check the content fields and keep the slug unchanged.", 422);
   try {
     await getDb();
@@ -47,7 +48,8 @@ export async function DELETE(request: NextRequest, context: Params) {
   try {
     await getDb();
     const collection = await getCollection<ContentDoc>("content");
-    const isStarter = (kind === "services" ? STARTER_SERVICES : STARTER_FAQS).some((item) => item.slug === id);
+    const starters = kind === "services" ? STARTER_SERVICES : kind === "faqs" ? STARTER_FAQS : [];
+    const isStarter = starters.some((item) => item.slug === id);
     if (isStarter) {
       const now = new Date();
       await collection.updateOne({ _id: id, type: kind }, { $set: { type: kind, slug: id, deleted: true, published: false, updatedAt: now }, $setOnInsert: { createdAt: now, sortOrder: 100, isStarter: false } }, { upsert: true });

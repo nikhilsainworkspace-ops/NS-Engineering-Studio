@@ -8,7 +8,7 @@ import { writeAudit } from "@/lib/audit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
-type LeadDoc = { _id: string; requestKey?: string; name: string; email: string; phone: string; subject: string; projectType?: string; timeline?: string; message: string; status: "new" | "in_progress" | "resolved"; notes: string; createdAt: Date; updatedAt: Date };
+type LeadDoc = { _id: string; requestKey?: string; name: string; email: string; phone: string; subject: string; organization?: string; state?: string; city?: string; projectSlug?: string; projectType?: string; timeline?: string; message: string; status: "new" | "contacted" | "in_progress" | "converted" | "closed" | "resolved"; priority?: "low" | "normal" | "high" | "urgent"; assignedTo?: string; followUpDate?: string; notes: string; createdAt: Date; updatedAt: Date };
 const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 export async function GET(request: NextRequest) {
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
   if (!session) return jsonError("Authentication required.", 401);
   const query = (request.nextUrl.searchParams.get("q") ?? "").trim().slice(0, 100);
   const statusParam = request.nextUrl.searchParams.get("status") ?? "all";
-  const allowedStatuses = ["all", "new", "in_progress", "resolved"] as const;
+  const allowedStatuses = ["all", "new", "contacted", "in_progress", "converted", "closed", "resolved"] as const;
   if (!allowedStatuses.includes(statusParam as (typeof allowedStatuses)[number])) return jsonError("Invalid filter.", 400);
   const status = statusParam as (typeof allowedStatuses)[number];
   try {
@@ -25,10 +25,10 @@ export async function GET(request: NextRequest) {
     if (status !== "all") filter.status = status as LeadDoc["status"];
     if (query) {
       const regex = new RegExp(escapeRegex(query), "i");
-      filter.$or = [{ name: regex }, { email: regex }, { subject: regex }, { message: regex }] as Filter<LeadDoc>[];
+      filter.$or = [{ name: regex }, { email: regex }, { subject: regex }, { message: regex }, { organization: regex }, { state: regex }, { city: regex }, { projectSlug: regex }] as Filter<LeadDoc>[];
     }
     const items = await leads.find(filter).sort({ createdAt: -1 }).limit(100).toArray();
-    return privateJson({ leads: items.map((lead) => ({ id: lead._id, name: lead.name, email: lead.email, phone: lead.phone, subject: lead.subject, projectType: lead.projectType ?? "Not sure yet", timeline: lead.timeline ?? "Not decided yet", message: lead.message, status: lead.status, notes: lead.notes, createdAt: lead.createdAt, updatedAt: lead.updatedAt })) });
+    return privateJson({ leads: items.map((lead) => ({ id: lead._id, name: lead.name, email: lead.email, phone: lead.phone, organization: lead.organization ?? "", state: lead.state ?? "", city: lead.city ?? "", projectSlug: lead.projectSlug ?? "", subject: lead.subject, projectType: lead.projectType ?? "Not sure yet", timeline: lead.timeline ?? "Not decided yet", message: lead.message, status: lead.status, priority: lead.priority ?? "normal", assignedTo: lead.assignedTo ?? "", followUpDate: lead.followUpDate ?? "", notes: lead.notes, createdAt: lead.createdAt, updatedAt: lead.updatedAt })) });
   } catch {
     return jsonError("The inquiry inbox is temporarily unavailable.", 503);
   }
@@ -49,7 +49,7 @@ export async function PATCH(request: NextRequest) {
   if (!parsed.success) return jsonError("Please check the status and notes.", 422);
   try {
     const leads = await getCollection<LeadDoc>("leads");
-    const result = await leads.updateOne({ _id: id }, { $set: { status: parsed.data.status, notes: parsed.data.notes, updatedAt: new Date() } });
+    const result = await leads.updateOne({ _id: id }, { $set: { status: parsed.data.status, notes: parsed.data.notes, assignedTo: parsed.data.assignedTo, priority: parsed.data.priority, followUpDate: parsed.data.followUpDate, updatedAt: new Date() } });
     if (!result.matchedCount) return jsonError("This inquiry could not be found.", 404);
     await writeAudit("lead.updated", id);
     return privateJson({ ok: true });
