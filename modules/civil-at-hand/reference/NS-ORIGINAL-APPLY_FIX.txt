@@ -1,0 +1,16 @@
+NS Studio — Vercel TypeScript build fix
+
+This ZIP contains only the three replacement source files needed to address the TypeScript errors in the supplied Vercel build log.
+
+Apply it:
+1. Download and extract this ZIP.
+2. Copy the extracted app/ and scripts/ folders into the ROOT of your existing GitHub repository.
+3. Allow the existing files to be replaced when prompted. Do not delete other project files or environment variables.
+4. Commit and push the three changed files to the repository's main branch. Vercel should start a new deployment automatically.
+
+Changed files:
+- app/api/admin/content/[kind]/[id]/route.ts — fixes duplicate slug property from object spread.
+- app/api/admin/leads/route.ts — types MongoDB query filters and validated lead IDs.
+- scripts/seed.ts — declares that seeded MongoDB documents use string IDs.
+
+These changes target the TypeScript errors in the pasted build log. This environment could not install dependencies from npm, so a full Next.js build could not be rerun here. Check the next Vercel build log before considering the deployment successful.

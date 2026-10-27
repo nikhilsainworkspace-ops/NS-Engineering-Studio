@@ -1,0 +1,41 @@
+CIVIL AT HAND — SOURCE RESTORE ZIP
+===================================
+
+WHAT THIS IS
+------------
+This archive contains the full source tree taken from the uploaded
+CivilAtHand-feature-custom-forms-builder.zip, plus a protective .gitignore.
+It is NOT the patch-only ZIP and is NOT a verified production build.
+
+IMPORTANT LIMITATION
+--------------------
+The source snapshot includes the Custom Forms feature work. GitHub's PR #2
+description says the full typecheck, tests, lint, and build were not run, and
+its Vercel status failed. Therefore, this archive cannot be guaranteed to
+restore the exact deployed version or to deploy successfully without testing.
+Keep the other branches and this ZIP as backups until the live site is checked.
+
+HOW TO USE THIS ZIP SAFELY
+--------------------------
+1. Download and extract this ZIP on your computer. It contains app/,
+   components/, lib/, models/, public/, tests/, package.json, and other files
+   directly at the archive root.
+2. Use GitHub Desktop (recommended) to clone your CivilAtHand repository to
+   your computer, or open your existing local clone. Do NOT delete the .git
+   folder.
+3. Make sure you are on the main branch and that the working tree is clean.
+4. Copy the extracted ZIP contents into the local repository folder. Allow the
+   source files to be copied. Delete the old patch-only file named
+   changes.patch if it is still in the repository root. Do not copy .env files,
+   database credentials, node_modules, or .next folders into the repository.
+5. Review GitHub Desktop's change list. It should show real project source
+   folders/files, not only a ZIP or changes.patch. Commit with a message such as
+   "Restore full CivilAtHand source tree" and push to origin/main.
+6. Open the Vercel deployment and check that it succeeds. Open the live website
+   and test login, dashboard, existing pages, and core workflows. If deployment
+   fails, do not delete the other branches; restore/revert the last change first.
+7. Only after the live website has been checked and a separate backup exists
+   should you consider deleting the temporary branches. Keep main as default.
+
+DO NOT upload this ZIP as a single file expecting GitHub to unpack it. GitHub
+will store it as a ZIP file; it will not replace your source tree automatically.
